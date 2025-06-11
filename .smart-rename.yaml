@@ -1,0 +1,9 @@
+search_term: source
+replace_term: destination
+exclude_extensions:
+  - .log
+  - .bak
+include_extensions:
+  - .php
+  - .js
+  - .txt 

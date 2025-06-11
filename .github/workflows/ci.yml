@@ -1,0 +1,67 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run linting
+      run: |
+        flake8 .
+    - name: Run tests with coverage
+      run: |
+        pytest tests/ --cov=smart_rename_pro --cov-report=xml
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.xml
+        fail_ci_if_error: true
+
+  build-exe:
+    runs-on: windows-latest
+    needs: test
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --name smart-rename smart_rename_pro.py
+    - name: Upload executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: smart-rename-exe
+        path: dist/smart-rename.exe
+    - name: Release executable
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/smart-rename.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
