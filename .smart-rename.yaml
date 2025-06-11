@@ -1,5 +1,5 @@
-search_term: source
-replace_term: destination
+search_term: stripe
+replace_term: zarinpal
 exclude_extensions:
   - .log
   - .bak
