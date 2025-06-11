@@ -175,7 +175,6 @@ class ReplaceConfig:
             "%B %d, %Y",  # Month DD, YYYY
             "%B %d %Y",  # Month DD YYYY
             "%B %Y",  # Month YYYY
-            "%B %d",  # Month DD
             "%B %d, %Y %H:%M",  # Month DD, YYYY HH:MM
             "%B %d, %Y %H:%M:%S",  # Month DD, YYYY HH:MM:SS
             "%B %d, %Y %H:%M:%S.%f",  # Month DD, YYYY HH:MM:SS.fff
@@ -207,7 +206,6 @@ class ReplaceConfig:
             "%B %d, %Y",  # Month DD, YYYY
             "%B %d %Y",  # Month DD YYYY
             "%B %Y",  # Month YYYY
-            "%B %d",  # Month DD
         ]
         for loc in ["C", "en_US.UTF-8"]:
             try:
@@ -443,8 +441,8 @@ class TextProcessor:
         if ReplaceConfig._looks_like_date(term) and ReplaceConfig._is_valid_date(term):
             return
 
-        # Check for prohibited characters
-        invalid_chars = r'[<>:"\\|?*]'
+        # Check for prohibited characters (including forward slash)
+        invalid_chars = r'[<>:"\\|?*/]'
         if re.search(invalid_chars, term):
             raise SmartRenameError(
                 f"Invalid {term_type} term '{term}' contains prohibited characters: {invalid_chars}"
