@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ 
+  theme: localStorage.theme || 'auto', 
+  showMobileMenu: false,
+  copiedTON: false,
+  copiedTRON: false,
+  sponsorType: 'monthly'
+}" :class="{ 'dark': theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) }" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sponsor Smart-Rename | memarzade.dev</title>
+  <meta name="description" content="Support Smart-Rename: Enterprise Edition by sponsoring Ali Memarzade. Your contributions help maintain and enhance this open-source file renaming tool.">
+  <meta name="keywords" content="Smart-Rename, sponsor, open-source, file renaming, memarzade.dev, Ali Memarzade, GitHub Sponsors, donation">
+  <meta name="author" content="Ali Memarzade">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://memarzade.dev/smart-rename/sponsor">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sponsor Smart-Rename">
+  <meta property="og:description" content="Support the development of Smart-Rename, an enterprise-grade file renaming tool.">
+  <meta property="og:url" content="https://memarzade.dev/smart-rename/sponsor">
+  <meta property="og:image" content="https://memarzade.dev/smart-rename/og-image.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sponsor Smart-Rename">
+  <meta name="twitter:description" content="Support Smart-Rename, an open-source file renaming tool by Ali Memarzade.">
+  <meta name="twitter:image" content="https://memarzade.dev/smart-rename/og-image.png">
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Sponsor Smart-Rename",
+      "description": "Support page for sponsoring Smart-Rename: Enterprise Edition, an open-source file renaming tool.",
+      "author": {
+        "@type": "Person",
+        "name": "Ali Memarzade",
+        "url": "https://memarzade.dev"
+      },
+      "url": "https://memarzade.dev/smart-rename/sponsor",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "memarzade.dev",
+        "url": "https://memarzade.dev"
+      }
+    }
+  </script>
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M4 2h16a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm2 4v12h12V6H6zm2 2h8v2H8V8zm0 4h8v2H8v-2z'/></svg>">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            dark: '#0a0a0a',
+            light: '#fafafa',
+            primary: '#000000',
+            'primary-dark': '#ffffff',
+            gray: {
+              50: '#f9fafb',
+              100: '#f3f4f6',
+              200: '#e5e7eb',
+              300: '#d1d5db',
+              400: '#9ca3af',
+              500: '#6b7280',
+              600: '#4b5563',
+              700: '#374151',
+              800: '#1f2a44',
+              900: '#111827'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+            mono: ['Fira Code', 'ui-monospace', 'monospace']
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out',
+            'slide-in': 'slideIn 0.3s ease-out'
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            slideIn: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Alpine.js CDN -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .copy-success { animation: flash 0.5s; }
+    @keyframes flash {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: rgba(0, 0, 0, 0.1); }
+    }
+    .tier-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .custom-amount-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-light dark:bg-dark text-primary dark:text-primary-dark min-h-screen font-sans">
+  <!-- Mobile Menu -->
+  <div class="md:hidden fixed top-0 left-0 right-0 bg-light dark:bg-dark z-50 shadow-md">
+    <div class="flex justify-between items-center p-4">
+      <a href="../index.html" class="text-2xl font-bold">Smart-Rename</a>
+      <button @click="showMobileMenu = !showMobileMenu" aria-label="Toggle mobile menu" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" x-show="!showMobileMenu" x-cloak></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" x-show="showMobileMenu" x-cloak></path>
+        </svg>
+      </button>
+    </div>
+    <div x-show="showMobileMenu" x-cloak x-transition class="p-4 bg-light dark:bg-dark border-t border-gray-200 dark:border-gray-600">
+      <nav>
+        <ul class="space-y-1">
+          <li><a href="../index.html" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Home</a></li>
+          <li><a href="../readme.html" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Documentation</a></li>
+          <li><a href="#" @click="showMobileMenu = false" class="block p-2 rounded bg-gray-200 dark:bg-gray-700 font-semibold">Sponsor</a></li>
+          <li><a href="https://github.com/memarzade-dev/smart-rename" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">GitHub</a></li>
+        </ul>
+      </nav>
+      <div class="mt-4 pt-2 border-t border-gray-200 dark:border-gray-600">
+        <label class="block text-sm font-medium">Theme</label>
+        <div class="flex gap-2 mt-2">
+          <button @click="theme = 'light'; localStorage.theme = 'light'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'light' }" class="p-2 rounded" aria-label="Light theme">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </button>
+          <button @click="theme = 'dark'; localStorage.theme = 'dark'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'dark' }" class="p-2 rounded" aria-label="Dark theme">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+          </button>
+          <button @click="theme = 'auto'; localStorage.theme = 'auto'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'auto' }" class="p-2 rounded" aria-label="System theme">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Layout -->
+  <div class="flex">
+    <!-- Sidebar -->
+    <aside class="hidden md:block w-64 h-screen sticky top-0 bg-light dark:bg-dark border-r border-gray-200 dark:border-gray-700">
+      <div class="p-6">
+        <h1 class="text-2xl font-bold"><a href="../index.html">Smart-Rename</a></h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Sponsor Support</p>
+        <nav class="mt-8">
+          <ul class="space-y-1">
+            <li><a href="../index.html" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Home</a></li>
+            <li><a href="../readme.html" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Documentation</a></li>
+            <li><a href="#" class="block p-2 rounded bg-gray-200 dark:bg-gray-700 font-semibold">Sponsor</a></li>
+            <li><a href="https://github.com/memarzade-dev/smart-rename" target="_blank" rel="noopener" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">GitHub</a></li>
+          </ul>
+        </nav>
+        <div class="mt-8 p-4 bg-gray-100 dark:bg-gray-900 rounded-lg">
+          <h3 class="text-sm font-semibold">Quick Donate</h3>
+          <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Support via crypto wallets.</p>
+          <div class="mt-2 space-y-2">
+            <div x-data="{ copied: false }" class="flex items-center justify-between p-2 bg-light dark:bg-dark rounded border border-gray-200 dark:border-gray-700">
+              <span class="text-xs font-mono truncate">UQAc2D8n8xER...</span>
+              <button @click="navigator.clipboard.writeText('UQAc2D8n8xERl7oaC509o8mTe4d07JDDU73qvz-eXSlprwjO'); copied = true; setTimeout(() => copied = false, 2000)" :class="{ 'copy-success': copied }" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Copy TON wallet address">
+                <span x-text="copied ? '✓' : '📋'" class="text-xs"></span>
+              </button>
+            </div>
+            <div x-data="{ copied: false }" class="flex items-center justify-between p-2 bg-light dark:bg-dark rounded border border-gray-200 dark:border-gray-700">
+              <span class="text-xs font-mono truncate">TXjYKKCudbhu...</span>
+              <button @click="navigator.clipboard.writeText('TXjYKKCudbhuVEpQXBRk2J4CxFoyuzyjsg'); copied = true; setTimeout(() => copied = false, 2000)" :class="{ 'copy-success': copied }" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Copy TRON wallet address">
+                <span x-text="copied ? '✓' : '📋'" class="text-xs"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6">
+          <h3 class="text-sm font-semibold">Theme</h3>
+          <div class="flex gap-2 mt-2">
+            <button @click="theme = 'light'; localStorage.theme = 'light'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'light' }" class="p-2 rounded" aria-label="Light theme">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+            </button>
+            <button @click="theme = 'dark'; localStorage.theme = 'dark'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'dark' }" class="p-2 rounded" aria-label="Dark theme">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+              </svg>
+            </button>
+            <button @click="theme = 'auto'; localStorage.theme = 'auto'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'auto' }" class="p-2 rounded" aria-label="System theme">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 md:p-10 pt-20 md:pt-10 max-w-4xl mx-auto">
+      <h1 class="text-4xl font-bold animate-slide-in">Sponsor Smart-Rename</h1>
+      <p class="text-lg mt-4 animate-slide-in">Support the development of Smart-Rename: Enterprise Edition, an open-source tool for intelligent file and content renaming.</p>
+
+      <!-- Profile Section -->
+      <section class="mt-8 bg-gray-100 dark:bg-gray-800 rounded-lg p-6 animate-slide-in">
+        <div class="flex flex-col sm:flex-row items-center gap-6">
+          <img src="https://avatars.githubusercontent.com/u/138699761?s=160&v=4" alt="Ali Memarzade avatar" class="w-24 h-24 rounded-full border-4 border-gray-200 dark:border-gray-700">
+          <div>
+            <h2 class="text-2xl font-semibold">Ali Memarzade</h2>
+            <p class="text-gray-600 dark:text-gray-400">@memarzade-dev</p>
+            <p class="mt-2">Your sponsorship helps maintain Smart-Rename, develop new features, and provide enterprise-grade support. Join the community in keeping this project thriving!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Smart-Rename -->
+      <section class="mt-8 animate-slide-in">
+        <h2 class="text-3xl font-bold">Why Sponsor Smart-Rename?</h2>
+        <p class="mt-4">Smart-Rename: Enterprise Edition (v2.1.0) is a powerful Python script designed for enterprise workflows, offering:</p>
+        <ul class="mt-4 space-y-2">
+          <li class="flex items-start">
+            <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Batch renaming with `.gitignore` support.
+          </li>
+          <li class="flex items-start">
+            <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Non-ASCII text handling, including Persian.
+          </li>
+          <li class="flex items-start">
+            <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Parallel processing for large-scale operations.
+          </li>
+          <li class="flex items-start">
+            <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            YAML configuration for complex workflows.
+          </li>
+        </ul>
+        <p class="mt-4">Your contributions fund feature development, security updates, documentation, and enterprise support via Tidelift.</p>
+      </section>
+
+      <!-- Sponsorship Tiers -->
+      <section class="mt-8 animate-slide-in">
+        <h2 class="text-3xl font-bold">Sponsorship Tiers</h2>
+        <div class="flex justify-between items-center mt-6 mb-4">
+          <h3 class="text-lg font-semibold">Select a Tier</h3>
+          <div class="flex bg-gray-100 dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-700">
+            <button @click="sponsorType = 'monthly'" :class="{ 'bg-gray-200 dark:bg-gray-700': sponsorType === 'monthly' }" class="px-4 py-2 rounded-l-md font-medium">Monthly</button>
+            <button @click="sponsorType = 'one-time'" :class="{ 'bg-gray-200 dark:bg-gray-700': sponsorType === 'one-time' }" class="px-4 py-2 rounded-r-md font-medium">One-time</button>
+          </div>
+        </div>
+
+        <!-- Custom Amount -->
+        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6 tier-card">
+          <h3 class="text-xl font-semibold">Custom Amount</h3>
+          <form x-data="{ amount: '' }" @submit.prevent class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+            <div class="flex items-center">
+              <span class="text-lg font-medium mr-2">$</span>
+              <input type="number" x-model="amount" min="1" step="1" class="custom-amount-input w-32 border border-gray-300 dark:border-gray-600 px-3 py-2 rounded bg-light dark:bg-dark" placeholder="Amount" aria-label="Custom sponsorship amount">
+              <span class="ml-2 text-gray-600 dark:text-gray-400" x-text="sponsorType === 'monthly' ? '/month' : ''"></span>
+            </div>
+            <a :href="'https://github.com/sponsors/memarzade-dev?amount=' + amount" target="_blank" rel="noopener" class="px-4 py-2 bg-primary dark:bg-primary-dark text-light dark:text-dark rounded hover:bg-gray-800 dark:hover:bg-gray-200" :class="{ 'opacity-50 pointer-events-none': !amount || amount < 1 }">Sponsor Now</a>
+          </form>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Choose a custom amount to support Smart-Rename. You’ll receive a public sponsor badge.</p>
+        </div>
+
+        <!-- Community Tier -->
+        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6 tier-card">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold">Community Sponsor</h3>
+            <span class="text-lg font-bold">$5<span x-show="sponsorType === 'monthly'" class="text-sm font-normal">/month</span></span>
+          </div>
+          <ul class="mt-4 space-y-2">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Community sponsor badge on your profile
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Name in Smart-Rename README
+            </li>
+          </ul>
+          <a href="https://github.com/sponsors/memarzade-dev" target="_blank" rel="noopener" class="mt-4 block w-full text-center bg-primary dark:bg-primary-dark text-light dark:text-dark py-2 rounded hover:bg-gray-800 dark:hover:bg-gray-200">Select Tier</a>
+        </div>
+
+        <!-- Professional Tier -->
+        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6 tier-card">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold">Professional Sponsor</h3>
+            <span class="text-lg font-bold">$25<span x-show="sponsorType === 'monthly'" class="text-sm font-normal">/month</span></span>
+          </div>
+          <ul class="mt-4 space-y-2">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Professional sponsor badge
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Priority issue tracking
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Quarterly project updates
+            </li>
+          </ul>
+          <a href="https://github.com/sponsors/memarzade-dev" target="_blank" rel="noopener" class="mt-4 block w-full text-center bg-primary dark:bg-primary-dark text-light dark:text-dark py-2 rounded hover:bg-gray-800 dark:hover:bg-gray-200">Select Tier</a>
+        </div>
+
+        <!-- Enterprise Tier -->
+        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6 tier-card">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold">Enterprise Sponsor</h3>
+            <span class="text-lg font-bold">Custom</span>
+          </div>
+          <ul class="mt-4 space-y-2">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Enterprise badge
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Premium support via Tidelift
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-2 mt-1 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Custom integrations and SLAs
+            </li>
+          </ul>
+          <a href="https://tidelift.com/subscription/pkg/pypi-smart-rename" target="_blank" rel="noopener" class="mt-4 block w-full text-center bg-primary dark:bg-primary-dark text-light dark:text-dark py-2 rounded hover:bg-gray-800 dark:hover:bg-gray-200">Contact Tidelift</a>
+        </div>
+      </section>
+
+      <!-- Donation Section -->
+      <section class="mt-8 animate-slide-in">
+        <h2 class="text-3xl font-bold">Donate via Cryptocurrency</h2>
+        <p class="mt-4">Support Smart-Rename with a one-time donation using TON or TRON.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+            <h3 class="text-lg font-semibold">TON Wallet</h3>
+            <p class="text-sm font-mono break-all">UQAc2D8n8xERl7oaC509o8mTe4d07JDDU73qvz-eXSlprwjO</p>
+            <button @click="navigator.clipboard.writeText('UQAc2D8n8xERl7oaC509o8mTe4d07JDDU73qvz-eXSlprwjO'); copiedTON = true; setTimeout(() => copiedTON = false, 2000)" :class="{ 'copy-success': copiedTON }" class="mt-2 px-4 py-2 bg-primary dark:bg-primary-dark text-light dark:text-dark rounded hover:bg-gray-800 dark:hover:bg-gray-200" aria-label="Copy TON wallet address">
+              <span x-text="copiedTON ? 'Copied!' : 'Copy Address'"></span>
+            </button>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=UQAc2D8n8xERl7oaC509o8mTe4d07JDDU73qvz-eXSlprwjO" alt="TON Wallet QR Code" class="mt-4 mx-auto" loading="lazy">
+          </div>
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+            <h3 class="text-lg font-semibold">TRON Wallet</h3>
+            <p class="text-sm font-mono break-all">TXjYKKCudbhuVEpQXBRk2J4CxFoyuzyjsg</p>
+            <button @click="navigator.clipboard.writeText('TXjYKKCudbhuVEpQXBRk2J4CxFoyuzyjsg'); copiedTRON = true; setTimeout(() => copiedTRON = false, 2000)" :class="{ 'copy-success': copiedTRON }" class="mt-2 px-4 py-2 bg-primary dark:bg-primary-dark text-light dark:text-dark rounded hover:bg-gray-800 dark:hover:bg-gray-200" aria-label="Copy TRON wallet address">
+              <span x-text="copiedTRON ? 'Copied!' : 'Copy Address'"></span>
+            </button>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TXjYKKCudbhuVEpQXBRk2J4CxFoyuzyjsg" alt="TRON Wallet QR Code" class="mt-4 mx-auto" loading="lazy">
+          </div>
+        </div>
+      </section>
+
+      <!-- Other Funding Platforms -->
+      <section class="mt-8 animate-slide-in">
+        <h2 class="text-3xl font-bold">Other Ways to Support</h2>
+        <p class="mt-4">Contribute via these platforms to help sustain Smart-Rename.</p>
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a href="https://ko-fi.com/memarzade-dev" target="_blank" rel="noopener" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">Ko-fi</a>
+          <a href="https://www.buymeacoffee.com/memarzade-dev" target="_blank" rel="noopener" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">Buy Me a Coffee</a>
+          <a href="https://opencollective.com/memarzade-dev" target="_blank" rel="noopener" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">Open Collective</a>
+        </div>
+      </section>
+
+      <footer class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div>
+            <p class="text-sm">© 2024 Ali Memarzade. All rights reserved.</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400">Smart-Rename v2.1.0</p>
+          </div>
+          <div class="flex gap-4 text-sm">
+            <a href="../index.html" class="underline hover:text-gray-600 dark:hover:text-gray-300">Home</a>
+            <a href="../readme.html" class="underline hover:text-gray-600 dark:hover:text-gray-300">Documentation</a>
+            <a href="https://github.com/memarzade-dev/smart-rename" target="_blank" rel="noopener" class="underline hover:text-gray-600 dark:hover:text-gray-300">GitHub</a>
+            <a href="https://tidelift.com/subscription/pkg/pypi-smart-rename" target="_blank" rel="noopener" class="underline hover:text-gray-600 dark:hover:text-gray-300">Tidelift</a>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Theme Sync for Auto Mode
+    document.addEventListener('DOMContentLoaded', () => {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addEventListener('change', () => {
+        if (localStorage.theme === 'auto') {
+          document.documentElement.classList.toggle('dark', mediaQuery.matches);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

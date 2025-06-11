@@ -2,14 +2,6 @@
 
 import pytest
 from pathlib import Path
-from smart_rename_pro import (
-    DirectoryProcessor,
-    SmartRenameError,
-    ReplaceConfig,
-    TextProcessor,
-    FileHandler,
-    IgnoreFileProcessor
-)
 
 
 def test_basic_rename():

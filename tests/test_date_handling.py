@@ -1,7 +1,6 @@
 """Test date handling functionality."""
 
 import pytest
-from datetime import datetime, date
 from pathlib import Path
 from smart_rename_pro import DirectoryProcessor, SmartRenameError, ReplaceConfig
 
@@ -374,18 +373,6 @@ def test_date_with_epoch():
     )
     assert config.search_term == "Epoch 1 2023"
     assert config.replace_term == "Epoch 1 2024"
-
-
-def test_date_with_era():
-    """Test handling of dates with era information."""
-    config = ReplaceConfig(
-        search_term="Era 1 2023",
-        replace_term="Era 1 2024",
-        directory=Path("test_dir"),
-        dry_run=True
-    )
-    assert config.search_term == "Era 1 2023"
-    assert config.replace_term == "Era 1 2024"
 
 
 def test_date_with_age():

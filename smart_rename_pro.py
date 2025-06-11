@@ -372,7 +372,7 @@ class DirectoryProcessor:
                     )
                 )
 
-            for future in as_completed(futures):
+            for future in futures:
                 try:
                     future.result()
                 except Exception as e:
