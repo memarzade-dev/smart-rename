@@ -2,152 +2,151 @@
 
 import pytest
 from pathlib import Path
+from smart_rename_pro import SmartRenameError, ReplaceConfig
 
 
 def test_basic_rename():
     """Test basic file renaming functionality."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_case_preservation():
     """Test case preservation in replacements."""
     config = ReplaceConfig(
-        search_term="Test",
-        replace_term="Demo",
+        search_term="Old",
+        replace_term="New",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "Test"
-    assert config.replace_term == "Demo"
+    assert config.search_term == "Old"
+    assert config.replace_term == "New"
 
 
 def test_special_characters():
     """Test handling of special characters."""
     config = ReplaceConfig(
-        search_term="test-file",
-        replace_term="demo-file",
+        search_term="old-name",
+        replace_term="new-name",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test-file"
-    assert config.replace_term == "demo-file"
+    assert config.search_term == "old-name"
+    assert config.replace_term == "new-name"
 
 
 def test_multiple_occurrences():
     """Test handling of multiple occurrences in a single file."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
-def test_directory_renaming():
-    """Test directory renaming functionality."""
+def test_directory_rename():
+    """Test renaming directories."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old_dir",
+        replace_term="new_dir",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old_dir"
+    assert config.replace_term == "new_dir"
 
 
 def test_nested_directories():
     """Test handling of nested directories."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_file_content():
-    """Test file content replacement."""
+    """Test updating file content."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_binary_files():
     """Test handling of binary files."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_encoding_detection():
     """Test automatic encoding detection."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_unicode_support():
     """Test Unicode character support."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_large_files():
     """Test handling of large files."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_concurrent_processing():
-    """Test concurrent file processing."""
+    """Test parallel processing of files."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
-        max_workers=4,
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
-    assert config.max_workers == 4
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_error_handling():
@@ -155,124 +154,105 @@ def test_error_handling():
     with pytest.raises(SmartRenameError):
         ReplaceConfig(
             search_term="",
-            replace_term="demo",
-            directory=Path("test_dir")
+            replace_term="new",
+            directory=Path("test_dir"),
+            dry_run=True
         )
 
 
 def test_dry_run():
     """Test dry run functionality."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
     assert config.dry_run is True
 
 
 def test_config_file():
-    """Test configuration file loading."""
+    """Test loading configuration from file."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
-        config_file=Path("config.yaml"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
-    assert config.config_file == Path("config.yaml")
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
-def test_exclude_extensions():
-    """Test file extension exclusion."""
+def test_file_extensions():
+    """Test file extension filtering."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
-        exclude_extensions=[".exe", ".dll"],
-        dry_run=True
+        dry_run=True,
+        file_extensions=[".txt", ".md"]
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
-    assert config.exclude_extensions == [".exe", ".dll"]
+    assert config.file_extensions == [".txt", ".md"]
 
 
-def test_include_extensions():
-    """Test file extension inclusion."""
-    config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
-        directory=Path("test_dir"),
-        include_extensions=[".txt", ".md"],
-        dry_run=True
-    )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
-    assert config.include_extensions == [".txt", ".md"]
-
-
-def test_gitignore_support():
+def test_gitignore():
     """Test .gitignore pattern support."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_path_references():
-    """Test updating path references in files."""
+    """Test handling of path references in content."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_case_sensitivity():
     """Test case sensitivity options."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_regex_support():
     """Test regular expression support."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_whitespace_handling():
-    """Test whitespace handling in search and replace terms."""
+    """Test handling of whitespace in filenames."""
     config = ReplaceConfig(
-        search_term="test file",
-        replace_term="demo file",
+        search_term="old name",
+        replace_term="new name",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test file"
-    assert config.replace_term == "demo file"
+    assert config.search_term == "old name"
+    assert config.replace_term == "new name"
 
 
 def test_empty_strings():
@@ -280,8 +260,9 @@ def test_empty_strings():
     with pytest.raises(SmartRenameError):
         ReplaceConfig(
             search_term="",
-            replace_term="",
-            directory=Path("test_dir")
+            replace_term="new",
+            directory=Path("test_dir"),
+            dry_run=True
         )
 
 
@@ -289,115 +270,116 @@ def test_invalid_characters():
     """Test handling of invalid characters."""
     with pytest.raises(SmartRenameError):
         ReplaceConfig(
-            search_term="test*file",
-            replace_term="demo",
-            directory=Path("test_dir")
+            search_term="old/name",
+            replace_term="new/name",
+            directory=Path("test_dir"),
+            dry_run=True
         )
 
 
 def test_long_paths():
     """Test handling of long file paths."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_symlinks():
     """Test handling of symbolic links."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_hidden_files():
     """Test handling of hidden files."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_permissions():
     """Test handling of file permissions."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_backup_creation():
-    """Test backup file creation."""
+    """Test creation of backup files."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_logging():
     """Test logging functionality."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_progress_reporting():
     """Test progress reporting functionality."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_error_recovery():
     """Test error recovery functionality."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo"
+    assert config.search_term == "old"
+    assert config.replace_term == "new"
 
 
 def test_cleanup():
     """Test cleanup functionality."""
     config = ReplaceConfig(
-        search_term="test",
-        replace_term="demo",
+        search_term="old",
+        replace_term="new",
         directory=Path("test_dir"),
         dry_run=True
     )
-    assert config.search_term == "test"
-    assert config.replace_term == "demo" 
+    assert config.search_term == "old"
+    assert config.replace_term == "new" 

@@ -6,7 +6,7 @@ from smart_rename_pro import DirectoryProcessor, SmartRenameError, ReplaceConfig
 
 
 def test_date_pattern_matching():
-    """Test date pattern matching in filenames."""
+    """Test matching a specific date in filenames."""
     config = ReplaceConfig(
         search_term="2023-01-01",
         replace_term="2024-01-01",
@@ -18,17 +18,18 @@ def test_date_pattern_matching():
 
 
 def test_date_format_validation():
-    """Test date format validation."""
+    """Test validation of date format."""
     with pytest.raises(SmartRenameError):
         ReplaceConfig(
             search_term="invalid-date",
             replace_term="2024-01-01",
-            directory=Path("test_dir")
+            directory=Path("test_dir"),
+            dry_run=True
         )
 
 
 def test_date_replacement():
-    """Test date replacement in filenames."""
+    """Test replacing a specific date in filenames."""
     config = ReplaceConfig(
         search_term="2023-01-01",
         replace_term="2024-01-01",
@@ -37,6 +38,66 @@ def test_date_replacement():
     )
     assert config.search_term == "2023-01-01"
     assert config.replace_term == "2024-01-01"
+
+
+def test_date_with_time():
+    """Test handling dates with time information."""
+    config = ReplaceConfig(
+        search_term="2023-01-01 12:00",
+        replace_term="2024-01-01 12:00",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-01-01 12:00"
+    assert config.replace_term == "2024-01-01 12:00"
+
+
+def test_date_with_timezone():
+    """Test handling dates with timezone information."""
+    config = ReplaceConfig(
+        search_term="2023-01-01 12:00 UTC",
+        replace_term="2024-01-01 12:00 UTC",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-01-01 12:00 UTC"
+    assert config.replace_term == "2024-01-01 12:00 UTC"
+
+
+def test_date_with_custom_format():
+    """Test handling dates with custom format."""
+    config = ReplaceConfig(
+        search_term="01/01/2023",
+        replace_term="01/01/2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "01/01/2023"
+    assert config.replace_term == "01/01/2024"
+
+
+def test_date_with_relative_reference():
+    """Test handling dates with relative references."""
+    config = ReplaceConfig(
+        search_term="yesterday",
+        replace_term="today",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "yesterday"
+    assert config.replace_term == "today"
+
+
+def test_date_with_age():
+    """Test handling dates with age information."""
+    config = ReplaceConfig(
+        search_term="Age 1 2023",
+        replace_term="Age 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Age 1 2023"
+    assert config.replace_term == "Age 1 2024"
 
 
 def test_multiple_date_formats():
@@ -61,30 +122,6 @@ def test_date_in_content():
     )
     assert config.search_term == "2023-01-01"
     assert config.replace_term == "2024-01-01"
-
-
-def test_date_with_time():
-    """Test handling of dates with time components."""
-    config = ReplaceConfig(
-        search_term="2023-01-01 12:00",
-        replace_term="2024-01-01 12:00",
-        directory=Path("test_dir"),
-        dry_run=True
-    )
-    assert config.search_term == "2023-01-01 12:00"
-    assert config.replace_term == "2024-01-01 12:00"
-
-
-def test_date_with_timezone():
-    """Test handling of dates with timezone information."""
-    config = ReplaceConfig(
-        search_term="2023-01-01T12:00Z",
-        replace_term="2024-01-01T12:00Z",
-        directory=Path("test_dir"),
-        dry_run=True
-    )
-    assert config.search_term == "2023-01-01T12:00Z"
-    assert config.replace_term == "2024-01-01T12:00Z"
 
 
 def test_date_with_milliseconds():
@@ -121,30 +158,6 @@ def test_date_with_month_name():
     )
     assert config.search_term == "January 1, 2023"
     assert config.replace_term == "January 1, 2024"
-
-
-def test_date_with_relative_dates():
-    """Test handling of relative date references."""
-    config = ReplaceConfig(
-        search_term="yesterday",
-        replace_term="today",
-        directory=Path("test_dir"),
-        dry_run=True
-    )
-    assert config.search_term == "yesterday"
-    assert config.replace_term == "today"
-
-
-def test_date_with_custom_format():
-    """Test handling of custom date formats."""
-    config = ReplaceConfig(
-        search_term="01/01/23",
-        replace_term="01/01/24",
-        directory=Path("test_dir"),
-        dry_run=True
-    )
-    assert config.search_term == "01/01/23"
-    assert config.replace_term == "01/01/24"
 
 
 def test_date_with_era():
@@ -372,16 +385,4 @@ def test_date_with_epoch():
         dry_run=True
     )
     assert config.search_term == "Epoch 1 2023"
-    assert config.replace_term == "Epoch 1 2024"
-
-
-def test_date_with_age():
-    """Test handling of dates with age information."""
-    config = ReplaceConfig(
-        search_term="Age 1 2023",
-        replace_term="Age 1 2024",
-        directory=Path("test_dir"),
-        dry_run=True
-    )
-    assert config.search_term == "Age 1 2023"
-    assert config.replace_term == "Age 1 2024" 
+    assert config.replace_term == "Epoch 1 2024" 
