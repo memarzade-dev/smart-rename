@@ -6,230 +6,223 @@
 # License: MIT
 # Status: Active & Thriving
 
-# 🎯 Primary Funding Platforms
-github: memarzade-dev  # Your main development hub
-custom: ['https://www.memarzade.dev']  # My digital garden
+# 🎯 Primary Funding Platforms & Community Support
+# This section contains platforms that will be displayed on your GitHub sponsor button.
+github:
+  - memarzade-dev
+  - memarzade-dev/smart-rename
+  - memarzade-dev/custom-sms
+custom: https://www.memarzade.dev
+ko_fi: memarzade-dev
+buy_me_a_coffee: memarzade-dev
+open_collective: memarzade-dev
+liberapay: memarzade-dev
+tidelift: npm/smart-rename
 
-# 🎨 Creative Support Options
-ko_fi: memarzade-dev  # Buy me a virtual coffee while I code
-buy_me_a_coffee: memarzade-dev  # Another way to fuel my coding sessions
+# --- The sections below are for informational purposes and are not read by GitHub's sponsor feature ---
 
-# 🌱 Community Support
-open_collective: memarzade-dev  # Join our growing community
-liberapay: memarzade-dev  # Support sustainable open source
-
-# 🚀 Professional Support
-tidelift: 
-  platform: npm
-  package: smart-rename
-  enterprise: true
-  support_level: premium
-
-# 💫 Additional Ways to Support
-thanks_dev: memarzade-dev  # Say thanks for my contributions
-issuehunt: memarzade-dev  # Support specific issues 
-
-# 🚀 Enterprise Support Platforms
-tidelift: 
+# 🚀 Enterprise Support Information
+tidelift_details:
   platform: npm
   package: smart-rename
   enterprise: true
   support_level: premium
   certifications:
-    - iso27001  # Your Security Guardian
-    - soc2      # Trust & Compliance Champion
-    - gdpr_compliant  # Privacy Protector
+    - iso27001
+    - soc2
+    - gdpr_compliant
   features:
-    - 24_7_enterprise_support  # Your Round-the-Clock Guardian
-    - security_vulnerability_management  # Shield Against Threats
-    - license_compliance  # Legal Peace of Mind
-    - dependency_management  # Dependency Harmony
-    - automated_updates  # Always Fresh & Secure
+    - 24_7_enterprise_support
+    - security_vulnerability_management
+    - license_compliance
+    - dependency_management
+    - automated_updates
 
 # 💫 Professional Development Support
-github: 
-  - memarzade-dev  # Your Code Companion
-  - memarzade-dev/smart-rename  # The Main Star
-  - memarzade-dev/custom-sms  # The Supporting Actor
-  tier: enterprise
-  features:
-    - private_repository_access  # Your Secret Garden
-    - team_management  # Team Harmony
-    - advanced_security  # Digital Fortress
-    - automated_workflows  # Efficiency Wizard
-    - enterprise_audit_logs  # History Keeper
+github_details:
+  - user: memarzade-dev
+  - repos:
+      - memarzade-dev/smart-rename
+      - memarzade-dev/custom-sms
+  - tier: enterprise
+  - features:
+      - private_repository_access
+      - team_management
+      - advanced_security
+      - automated_workflows
+      - enterprise_audit_logs
 
 # 🌈 Corporate Sponsorship
-open_collective: 
+open_collective_details:
   username: memarzade-dev
   type: corporate
   features:
-    - priority_support  # Your VIP Pass
-    - custom_integration  # Tailored Experience
-    - dedicated_sla  # Promise Keeper
-    - quarterly_reviews  # Growth Partner
-    - strategic_planning  # Future Shaper
+    - priority_support
+    - custom_integration
+    - dedicated_sla
+    - quarterly_reviews
+    - strategic_planning
   benefits:
-    - early_access  # First to Experience
-    - influence_roadmap  # Shape the Future
-    - dedicated_account_manager  # Your Personal Guide
-    - custom_development_priority  # Priority Lane
+    - early_access
+    - influence_roadmap
+    - dedicated_account_manager
+    - custom_development_priority
 
 # 🛡️ Technical Support & Maintenance
-community_bridge: 
+community_bridge:
   project: smart-rename
   type: technical
   support_level: enterprise
   services:
-    - code_review  # Code Whisperer
-    - performance_optimization  # Speed Wizard
-    - security_audit  # Security Guardian
-    - architecture_consulting  # Design Master
+    - code_review
+    - performance_optimization
+    - security_audit
+    - architecture_consulting
   response_times:
-    critical: 1_hour  # Lightning Fast
-    high: 4_hours    # Swift Response
-    medium: 24_hours # Steady Support
-    low: 48_hours    # Reliable Backup
+    critical: 1_hour
+    high: 4_hours
+    medium: 24_hours
+    low: 48_hours
 
 # 🌱 Development Resources
 lfx_crowdfunding:
   project: smart-rename
   type: development
-  focus: 
-    - feature_development  # Innovation Engine
-    - security_updates    # Shield Updater
-    - performance_optimization  # Speed Booster
-    - scalability_improvements  # Growth Enabler
+  focus:
+    - feature_development
+    - security_updates
+    - performance_optimization
+    - scalability_improvements
   priorities:
-    - enterprise_integration  # Connection Master
-    - cloud_native_support   # Cloud Whisperer
-    - microservices_architecture  # Modular Magic
-    - containerization  # Container Wizard
+    - enterprise_integration
+    - cloud_native_support
+    - microservices_architecture
+    - containerization
 
 # 📚 Professional Services
-custom:
+professional_services:
   - url: https://www.memarzade.dev
     type: professional_services
     features:
-      - consulting  # Wisdom Keeper
-      - custom_development  # Code Artist
-      - enterprise_support  # Support Guardian
-      - architecture_design  # Design Visionary
-      - performance_optimization  # Speed Master
+      - consulting
+      - custom_development
+      - enterprise_support
+      - architecture_design
+      - performance_optimization
     certifications:
-      - aws_certified  # Cloud Master
-      - azure_certified  # Azure Wizard
-      - kubernetes_certified  # Container Guru
+      - aws_certified
+      - azure_certified
+      - kubernetes_certified
   - url: https://memarzade.dev/smart-rename
     type: documentation
     features:
-      - api_reference  # Knowledge Base
-      - enterprise_guide  # Enterprise Compass
-      - integration_guide  # Integration Map
-      - security_guide  # Security Bible
-      - compliance_documentation  # Compliance Guide
+      - api_reference
+      - enterprise_guide
+      - integration_guide
+      - security_guide
+      - compliance_documentation
     formats:
-      - pdf  # Classic Wisdom
-      - interactive_web  # Digital Experience
-      - video_tutorials  # Visual Learning
-      - code_samples  # Code Examples
+      - pdf
+      - interactive_web
+      - video_tutorials
+      - code_samples
 
 # 🌟 Enterprise Integration Support
 polar:
   username: memarzade-dev
   services:
-    - enterprise_integration  # Connection Master
-    - custom_development  # Code Artist
-    - priority_support  # Support Guardian
-    - architecture_review  - Design Critic
-    - performance_audit  # Speed Inspector
+    - enterprise_integration
+    - custom_development
+    - priority_support
+    - architecture_review
+    - performance_audit
   integration_options:
-    - api_first  # API Pioneer
-    - microservices  # Service Architect
-    - serverless  # Server Whisperer
-    - containerized  # Container Master
+    - api_first
+    - microservices
+    - serverless
+    - containerized
 
 # 🛡️ Security & Compliance
 issuehunt:
   username: memarzade-dev
   focus:
-    - security_audits  # Security Guardian
-    - compliance_reviews  # Compliance Keeper
-    - vulnerability_management  # Threat Hunter
-    - penetration_testing  # Security Tester
+    - security_audits
+    - compliance_reviews
+    - vulnerability_management
+    - penetration_testing
   standards:
-    - owasp  # Web Security Guardian
-    - nist  # Security Standard Bearer
-    - iso27001  # Quality Guardian
-    - gdpr  # Privacy Protector
-    - hipaa  # Health Data Guardian
+    - owasp
+    - nist
+    - iso27001
+    - gdpr
+    - hipaa
 
 # 📚 Documentation & Training
 thanks_dev:
   username: memarzade-dev
   services:
-    - technical_documentation  # Knowledge Keeper
-    - training_materials  # Learning Guide
-    - best_practices_guide  # Best Practices Master
-    - video_tutorials  # Visual Teacher
-    - interactive_workshops  # Hands-on Guide
+    - technical_documentation
+    - training_materials
+    - best_practices_guide
+    - video_tutorials
+    - interactive_workshops
   formats:
-    - online_courses  # Digital Learning
-    - in_person_training  # Personal Touch
-    - documentation_portal  # Knowledge Hub
-    - api_explorer  # API Navigator
+    - online_courses
+    - in_person_training
+    - documentation_portal
+    - api_explorer
 
 # ⭐ Support Levels
 support_tiers:
   enterprise:
     features:
-      - 24_7_support  # Always There
-      - dedicated_account_manager  # Your Guide
-      - custom_integration  # Tailored Fit
-      - security_audit  # Security Guardian
-      - performance_optimization  # Speed Master
-      - quarterly_reviews  # Growth Partner
-      - strategic_planning  - Future Shaper
-      - custom_development  # Code Artist
+      - 24_7_support
+      - dedicated_account_manager
+      - custom_integration
+      - security_audit
+      - performance_optimization
+      - quarterly_reviews
+      - strategic_planning
+      - custom_development
     sla:
-      response_time: 1_hour  # Lightning Fast
-      resolution_time: 4_hours  # Swift Resolution
-      uptime: 99.99%  # Always Available
+      response_time: 1_hour
+      resolution_time: 4_hours
+      uptime: 99.99%
   professional:
     features:
-      - business_hours_support  # Reliable Support
-      - priority_bug_fixes  # Quick Fixes
-      - feature_requests  # Feature Builder
-      - monthly_reviews  # Monthly Check-in
-      - standard_integration  # Standard Fit
+      - business_hours_support
+      - priority_bug_fixes
+      - feature_requests
+      - monthly_reviews
+      - standard_integration
     sla:
-      response_time: 4_hours  # Quick Response
-      resolution_time: 24_hours  # Daily Resolution
-      uptime: 99.9%  # Highly Available
+      response_time: 4_hours
+      resolution_time: 24_hours
+      uptime: 99.9%
   community:
     features:
-      - community_support  # Community Care
-      - documentation  # Knowledge Base
-      - basic_updates  # Regular Updates
-      - bug_fixes  # Problem Solver
+      - community_forum
+      - documentation
+      - bug_reports
+      - feature_requests
     sla:
-      response_time: 48_hours  # Steady Response
-      resolution_time: 72_hours  # Reliable Resolution
-      uptime: 99%  # Available
+      response_time: 48_hours
+      resolution_time: 72_hours
+      uptime: 99%
 
 # 🎯 Quality Assurance
 qa_services:
   automated_testing:
-    - unit_tests  # Code Guardian
-    - integration_tests  # Connection Tester
-    - e2e_tests  # End-to-End Validator
-    - performance_tests  # Speed Tester
+    - unit_tests
+    - integration_tests
+    - e2e_tests
+    - performance_tests
   manual_testing:
-    - usability_testing  # User Experience
-    - security_testing  # Security Check
-    - compatibility_testing  # Compatibility Check
+    - usability_testing
+    - security_testing
+    - compatibility_testing
   continuous_integration:
-    - automated_builds  # Build Master
-    - automated_deployment  # Deployment Wizard
-    - automated_testing  # Test Automator
-    - code_quality_checks  # Quality Guardian 
+    - automated_builds
+    - automated_deployment
+    - automated_testing
+    - code_quality_checks

@@ -1,8 +1,10 @@
 """Test date handling functionality."""
 
-import pytest
 from pathlib import Path
-from smart_rename_pro import DirectoryProcessor, SmartRenameError, ReplaceConfig
+
+import pytest
+
+from smart_rename_pro import ReplaceConfig, SmartRenameError
 
 
 def test_date_pattern_matching():
@@ -11,7 +13,7 @@ def test_date_pattern_matching():
         search_term="2023-01-01",
         replace_term="2024-01-01",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023-01-01"
     assert config.replace_term == "2024-01-01"
@@ -24,7 +26,7 @@ def test_date_format_validation():
             search_term="invalid-date",
             replace_term="2024-01-01",
             directory=Path("test_dir"),
-            dry_run=True
+            dry_run=True,
         )
 
 
@@ -34,7 +36,7 @@ def test_date_replacement():
         search_term="2023-01-01",
         replace_term="2024-01-01",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023-01-01"
     assert config.replace_term == "2024-01-01"
@@ -46,7 +48,7 @@ def test_date_with_time():
         search_term="2023-01-01 12:00",
         replace_term="2024-01-01 12:00",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023-01-01 12:00"
     assert config.replace_term == "2024-01-01 12:00"
@@ -58,7 +60,7 @@ def test_date_with_timezone():
         search_term="2023-01-01 12:00 UTC",
         replace_term="2024-01-01 12:00 UTC",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023-01-01 12:00 UTC"
     assert config.replace_term == "2024-01-01 12:00 UTC"
@@ -70,7 +72,7 @@ def test_date_with_custom_format():
         search_term="01/01/2023",
         replace_term="01/01/2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "01/01/2023"
     assert config.replace_term == "01/01/2024"
@@ -82,7 +84,7 @@ def test_date_with_relative_reference():
         search_term="yesterday",
         replace_term="today",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "yesterday"
     assert config.replace_term == "today"
@@ -94,7 +96,7 @@ def test_date_with_age():
         search_term="Age 1 2023",
         replace_term="Age 1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Age 1 2023"
     assert config.replace_term == "Age 1 2024"
@@ -106,7 +108,7 @@ def test_multiple_date_formats():
         search_term="2023/01/01",
         replace_term="2024-01-01",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023/01/01"
     assert config.replace_term == "2024-01-01"
@@ -118,7 +120,7 @@ def test_date_in_content():
         search_term="2023-01-01",
         replace_term="2024-01-01",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023-01-01"
     assert config.replace_term == "2024-01-01"
@@ -130,7 +132,7 @@ def test_date_with_milliseconds():
         search_term="2023-01-01 12:00:00.123",
         replace_term="2024-01-01 12:00:00.123",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023-01-01 12:00:00.123"
     assert config.replace_term == "2024-01-01 12:00:00.123"
@@ -142,7 +144,7 @@ def test_date_with_weekday():
         search_term="Monday, 2023-01-01",
         replace_term="Monday, 2024-01-01",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Monday, 2023-01-01"
     assert config.replace_term == "Monday, 2024-01-01"
@@ -154,7 +156,7 @@ def test_date_with_month_name():
         search_term="January 1, 2023",
         replace_term="January 1, 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "January 1, 2023"
     assert config.replace_term == "January 1, 2024"
@@ -166,7 +168,7 @@ def test_date_with_era():
         search_term="2023 CE",
         replace_term="2024 CE",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023 CE"
     assert config.replace_term == "2024 CE"
@@ -178,7 +180,7 @@ def test_date_with_season():
         search_term="Winter 2023",
         replace_term="Winter 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Winter 2023"
     assert config.replace_term == "Winter 2024"
@@ -190,7 +192,7 @@ def test_date_with_quarter():
         search_term="Q1 2023",
         replace_term="Q1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Q1 2023"
     assert config.replace_term == "Q1 2024"
@@ -202,7 +204,7 @@ def test_date_with_fiscal_year():
         search_term="FY2023",
         replace_term="FY2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "FY2023"
     assert config.replace_term == "FY2024"
@@ -214,7 +216,7 @@ def test_date_with_academic_year():
         search_term="2023-24",
         replace_term="2024-25",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "2023-24"
     assert config.replace_term == "2024-25"
@@ -226,7 +228,7 @@ def test_date_with_week_number():
         search_term="Week 1, 2023",
         replace_term="Week 1, 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Week 1, 2023"
     assert config.replace_term == "Week 1, 2024"
@@ -238,7 +240,7 @@ def test_date_with_day_of_year():
         search_term="Day 1, 2023",
         replace_term="Day 1, 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Day 1, 2023"
     assert config.replace_term == "Day 1, 2024"
@@ -250,7 +252,7 @@ def test_date_with_holiday():
         search_term="New Year's Day 2023",
         replace_term="New Year's Day 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "New Year's Day 2023"
     assert config.replace_term == "New Year's Day 2024"
@@ -262,7 +264,7 @@ def test_date_with_event():
         search_term="Conference 2023",
         replace_term="Conference 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Conference 2023"
     assert config.replace_term == "Conference 2024"
@@ -274,7 +276,7 @@ def test_date_with_version():
         search_term="v2023.1.1",
         replace_term="v2024.1.1",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "v2023.1.1"
     assert config.replace_term == "v2024.1.1"
@@ -286,7 +288,7 @@ def test_date_with_release():
         search_term="Release 2023",
         replace_term="Release 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Release 2023"
     assert config.replace_term == "Release 2024"
@@ -298,7 +300,7 @@ def test_date_with_sprint():
         search_term="Sprint 1 2023",
         replace_term="Sprint 1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Sprint 1 2023"
     assert config.replace_term == "Sprint 1 2024"
@@ -310,7 +312,7 @@ def test_date_with_iteration():
         search_term="Iteration 1 2023",
         replace_term="Iteration 1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Iteration 1 2023"
     assert config.replace_term == "Iteration 1 2024"
@@ -322,7 +324,7 @@ def test_date_with_milestone():
         search_term="Milestone 1 2023",
         replace_term="Milestone 1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Milestone 1 2023"
     assert config.replace_term == "Milestone 1 2024"
@@ -334,7 +336,7 @@ def test_date_with_phase():
         search_term="Phase 1 2023",
         replace_term="Phase 1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Phase 1 2023"
     assert config.replace_term == "Phase 1 2024"
@@ -346,7 +348,7 @@ def test_date_with_stage():
         search_term="Stage 1 2023",
         replace_term="Stage 1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Stage 1 2023"
     assert config.replace_term == "Stage 1 2024"
@@ -358,7 +360,7 @@ def test_date_with_cycle():
         search_term="Cycle 1 2023",
         replace_term="Cycle 1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Cycle 1 2023"
     assert config.replace_term == "Cycle 1 2024"
@@ -370,7 +372,7 @@ def test_date_with_period():
         search_term="Period 1 2023",
         replace_term="Period 1 2024",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
     assert config.search_term == "Period 1 2023"
     assert config.replace_term == "Period 1 2024"
@@ -379,10 +381,10 @@ def test_date_with_period():
 def test_date_with_epoch():
     """Test handling of dates with epoch information."""
     config = ReplaceConfig(
-        search_term="Epoch 1 2023",
-        replace_term="Epoch 1 2024",
+        search_term="1970-01-01",
+        replace_term="2024-01-01",
         directory=Path("test_dir"),
-        dry_run=True
+        dry_run=True,
     )
-    assert config.search_term == "Epoch 1 2023"
-    assert config.replace_term == "Epoch 1 2024" 
+    assert config.search_term == "1970-01-01"
+    assert config.replace_term == "2024-01-01"

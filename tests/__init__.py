@@ -1,1 +1,1 @@
-"""Test package for smart-rename.""" 
+"""Test package for smart-rename."""

@@ -9,4 +9,4 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY smart_rename_pro.py .
 
 ENTRYPOINT ["python", "smart_rename_pro.py"]
-CMD ["--help"] 
+CMD ["--help"]

@@ -6,4 +6,4 @@ exclude_extensions:
 include_extensions:
   - .php
   - .js
-  - .txt 
+  - .txt

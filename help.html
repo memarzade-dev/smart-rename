@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Rename Pro - Enterprise Edition</title>
+
+    <!-- Chosen Palette: Calm Harmony (Slate & Indigo) -->
+    <!-- Application Structure Plan: The SPA is structured to guide the user from initial interest to adoption and potential sponsorship. It begins with a high-impact Hero section to grab attention. This is followed by an interactive Features Showcase that uses tabs and animated examples to demonstrate value, which is more engaging than a static list. The Getting Started section is a practical, step-by-step guide with copyable code snippets to lower the barrier to entry. Finally, the Enterprise & Support Hub consolidates all business-related information into a clean, tabbed interface, making it easy for professional users to find the information they need. This structure creates a logical user journey focused on engagement and clarity. -->
+    <!-- Visualization & Content Choices:
+        - Hero Section: Report Info -> Project Title/Pitch -> Goal: Inform/Engage -> Viz/Method: Large typography, prominent CTA buttons -> Justification: Creates a strong first impression.
+        - Features Showcase: Report Info -> Key Features list -> Goal: Explain/Demonstrate -> Viz/Method: Interactive tabs with animated 'before/after' text blocks -> Interaction: JS onClick to switch tabs and trigger animations -> Justification: Actively demonstrates the tool's power instead of passively listing features.
+        - Getting Started: Report Info -> Installation/Usage commands -> Goal: Instruct -> Viz/Method: Styled code blocks with one-click copy buttons -> Interaction: JS onClick to copy text to clipboard -> Justification: Enhances usability and reduces friction for new users.
+        - Enterprise & Support Hub: Report Info -> Sponsorship table, Security, Services -> Goal: Organize/Inform -> Viz/Method: A grid of cards for sponsorship options and a tabbed interface for detailed text -> Interaction: JS onClick to switch tabs -> Justification: Prevents information overload by organizing dense content into manageable, user-selectable sections.
+        - Libraries/Methods: Vanilla JavaScript for all interactions, Tailwind CSS for styling. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            /* slate-50 */
+            color: #1e293b;
+            /* slate-800 */
+        }
+
+        .code-font {
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        .nav-link {
+            transition: color 0.2s ease-in-out;
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card.active {
+            background-color: #e0e7ff;
+            /* indigo-100 */
+            border-color: #4f46e5;
+            /* indigo-600 */
+        }
+
+        .tab-button.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-slate-50/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#hero" class="text-2xl font-bold text-slate-900">🌟 Smart Rename Pro</a>
+                </div>
+                <nav class="hidden md:flex md:space-x-8">
+                    <a href="#features" class="nav-link text-slate-600 hover:text-indigo-600 font-medium">Features</a>
+                    <a href="#getting-started" class="nav-link text-slate-600 hover:text-indigo-600 font-medium">Get
+                        Started</a>
+                    <a href="#enterprise" class="nav-link text-slate-600 hover:text-indigo-600 font-medium">Enterprise &
+                        Support</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="py-20 sm:py-32 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight">
+                    A Smarter Way to Refactor Your Projects.
+                </h1>
+                <p class="mt-6 max-w-3xl mx-auto text-lg text-slate-600">
+                    **Smart Rename Pro** is an intelligent, case-preserving, and content-aware batch-renaming tool,
+                    built for professionals and enterprises who demand precision and efficiency.
+                </p>
+                <div class="mt-8 flex justify-center space-x-4">
+                    <a href="#getting-started"
+                        class="inline-block rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors">
+                        Get Started
+                    </a>
+                    <a href="https://github.com/memarzade-dev/smart-rename" target="_blank"
+                        class="inline-block rounded-md bg-slate-200 px-6 py-3 text-base font-semibold text-slate-700 shadow-sm hover:bg-slate-300 transition-colors">
+                        View on GitHub →
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">An Intelligent Refactoring
+                        Engine</h2>
+                    <p class="mt-4 text-lg text-slate-600">Discover how Smart Rename Pro goes beyond simple
+                        find-and-replace.</p>
+                </div>
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <!-- Feature Cards (Tabs) -->
+                    <div class="md:col-span-4">
+                        <div id="feature-list" class="flex flex-col space-y-4">
+                            <!-- Feature cards will be injected here by JS -->
+                        </div>
+                    </div>
+                    <!-- Feature Content Display -->
+                    <div class="md:col-span-8 bg-slate-900 rounded-lg p-6 min-h-[300px] shadow-lg">
+                        <div id="feature-content-display">
+                            <!-- Feature content will be injected here by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started Section -->
+        <section id="getting-started" class="py-20 sm:py-24 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Get Started in Minutes</h2>
+                    <p class="mt-4 text-lg text-slate-600">Follow these simple steps to install and run Smart Rename
+                        Pro.</p>
+                </div>
+
+                <div class="mt-12 space-y-12">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800"><span class="text-indigo-600">Step 1:</span>
+                            Installation</h3>
+                        <p class="mt-2 text-slate-600">First, clone the repository and install the necessary Python
+                            dependencies.</p>
+                        <div class="code-font mt-4 bg-slate-100 rounded-lg p-4 text-sm relative">
+                            <button onclick="copyToClipboard(this)"
+                                class="absolute top-2 right-2 bg-slate-300 text-slate-700 text-xs font-bold py-1 px-2 rounded hover:bg-slate-400 transition">Copy</button>
+                            <pre><code class="language-bash">git clone https://github.com/memarzade-dev/smart-rename.git
+cd smart-rename
+pip install -r requirements.txt</code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800"><span class="text-indigo-600">Step 2:</span>
+                            Basic Usage</h3>
+                        <p class="mt-2 text-slate-600">Execute a simple find-and-replace operation from the command
+                            line.</p>
+                        <div class="code-font mt-4 bg-slate-100 rounded-lg p-4 text-sm relative">
+                            <button onclick="copyToClipboard(this)"
+                                class="absolute top-2 right-2 bg-slate-300 text-slate-700 text-xs font-bold py-1 px-2 rounded hover:bg-slate-400 transition">Copy</button>
+                            <pre><code class="language-bash">python smart_rename_pro.py --directory ./my-project --search "OldName" --replace "NewName"</code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800"><span class="text-indigo-600">Step 3:</span>
+                            Advanced Usage</h3>
+                        <p class="mt-2 text-slate-600">For complex scenarios, use a `config.yml` file to define your
+                            operations.</p>
+                        <div class="code-font mt-4 bg-slate-100 rounded-lg p-4 text-sm relative">
+                            <button onclick="copyToClipboard(this)"
+                                class="absolute top-2 right-2 bg-slate-300 text-slate-700 text-xs font-bold py-1 px-2 rounded hover:bg-slate-400 transition">Copy</button>
+                            <pre><code class="language-yaml"># config.yml
+search_term: "OldComponent"
+replace_term: "NewService"
+exclude_extensions:
+  - .log
+  - .tmp</code></pre>
+                        </div>
+                        <div class="code-font mt-4 bg-slate-100 rounded-lg p-4 text-sm relative">
+                            <button onclick="copyToClipboard(this)"
+                                class="absolute top-2 right-2 bg-slate-300 text-slate-700 text-xs font-bold py-1 px-2 rounded hover:bg-slate-400 transition">Copy</button>
+                            <pre><code class="language-bash">python smart_rename_pro.py --directory ./my-project --config config.yml</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enterprise and Support Section -->
+        <section id="enterprise" class="py-20 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Enterprise & Support Hub
+                    </h2>
+                    <p class="mt-4 text-lg text-slate-600">Professional resources, security assurance, and ways to
+                        support the project.</p>
+                </div>
+
+                <div class="mt-12 max-w-4xl mx-auto">
+                    <!-- Tabs -->
+                    <div class="border-b border-slate-200">
+                        <nav id="enterprise-tabs" class="-mb-px flex space-x-6" aria-label="Tabs">
+                            <!-- Tab buttons will be injected here -->
+                        </nav>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div id="enterprise-tab-content" class="mt-8">
+                        <!-- Tab panels will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-600">
+                Crafted with ❤️ by **Ali Memarzade** ([@memarzade-dev](https://github.com/memarzade-dev)).
+            </p>
+            <p class="mt-2 text-sm text-slate-500">
+                This project is licensed under the **MIT License**.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener( 'DOMContentLoaded', function () {
+
+            // --- Features Section Logic ---
+            const features = [
+                {
+                    title: "Intelligent Case Preservation",
+                    description: "Automatically detects and applies `camelCase`, `PascalCase`, `snake_case`, and `UPPERCASE` patterns from the search term to the replacement.",
+                    example: {
+                        before_name: "myFile.js",
+                        before_content: "const myVariable = 'oldValue';",
+                        after_name: "myService.js",
+                        after_content: "const myService = 'newValue';"
+                    }
+                },
+                {
+                    title: "Deep Content Replacement",
+                    description: "Searches and replaces terms not just in filenames, but deep within the content of your text-based files.",
+                    example: {
+                        before_name: "config.py",
+                        before_content: "API_KEY = 'old_secret_key'",
+                        after_name: "config.py",
+                        after_content: "API_KEY = 'new_secret_key'"
+                    }
+                },
+                {
+                    title: "Configuration Driven",
+                    description: "Manage complex operations with fine-grained control using a simple `config.yml` file.",
+                    example: {
+                        before_name: "config.yml",
+                        before_content: `search_term: "old"\nreplace_term: "new"\nexclude: [".log"]`,
+                        after_name: "config.yml",
+                        after_content: `search_term: "old"\nreplace_term: "new"\nexclude: [".log"]`
+                    }
+                },
+                {
+                    title: "Ignore File Support",
+                    description: "Natively respects rules in `.gitignore` files to avoid unwanted changes in version-controlled or sensitive paths.",
+                    example: {
+                        before_name: ".gitignore",
+                        before_content: `node_modules\n*.log`,
+                        after_name: ".gitignore",
+                        after_content: `node_modules\n*.log`
+                    }
+                },
+            ];
+
+            const featureListContainer = document.getElementById( 'feature-list' );
+            const featureContentContainer = document.getElementById( 'feature-content-display' );
+
+            features.forEach( ( feature, index ) => {
+                const card = document.createElement( 'div' );
+                card.className = 'feature-card cursor-pointer p-4 border rounded-lg hover:bg-indigo-50';
+                card.dataset.index = index;
+                card.innerHTML = `
+                    <h4 class="font-bold text-slate-800">${ feature.title }</h4>
+                    <p class="text-sm text-slate-600 mt-1">${ feature.description }</p>
+                `;
+                featureListContainer.appendChild( card );
+            } );
+
+            function updateFeatureContent( index ) {
+                const feature = features[ index ];
+                featureContentContainer.innerHTML = `
+                    <div class="fade-in">
+                        <h3 class="text-xl font-bold text-white mb-4">${ feature.title }</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm code-font">
+                            <div>
+                                <p class="text-slate-400 mb-2">Before:</p>
+                                <div class="bg-slate-800 p-3 rounded">
+                                    <p class="text-green-400">// Filename: ${ feature.example.before_name }</p>
+                                    <pre class="text-white whitespace-pre-wrap">${ feature.example.before_content }</pre>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-slate-400 mb-2">After:</p>
+                                <div class="bg-slate-800 p-3 rounded">
+                                    <p class="text-cyan-400">// Filename: ${ feature.example.after_name }</p>
+                                    <pre class="text-white whitespace-pre-wrap">${ feature.example.after_content }</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.querySelectorAll( '.feature-card' ).forEach( ( c, i ) => {
+                    c.classList.toggle( 'active', i == index );
+                } );
+            }
+
+            featureListContainer.addEventListener( 'click', ( e ) => {
+                const card = e.target.closest( '.feature-card' );
+                if ( card ) {
+                    updateFeatureContent( card.dataset.index );
+                }
+            } );
+
+            // --- Enterprise Section Logic ---
+            const enterpriseTabs = document.getElementById( 'enterprise-tabs' );
+            const enterpriseTabContent = document.getElementById( 'enterprise-tab-content' );
+
+            const enterpriseData = {
+                'Support & Sponsorship': `
+                    <p class="text-slate-600 mb-6">This project thrives on community support. If you find Smart Rename Pro useful, please consider supporting its development through one of the following platforms.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <a href="https://github.com/sponsors/memarzade-dev" target="_blank" class="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow border border-slate-200">
+                            <h4 class="font-bold text-slate-800">💼 GitHub Sponsors</h4><p class="mt-2 text-sm text-slate-600">Primary sponsorship platform.</p>
+                        </a>
+                        <a href="https://tidelift.com/subscription/pkg/npm-smart-rename" target="_blank" class="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow border border-slate-200">
+                            <h4 class="font-bold text-slate-800">🛡️ Tidelift</h4><p class="mt-2 text-sm text-slate-600">Commercial support and security assurance.</p>
+                        </a>
+                        <a href="https://opencollective.com/memarzade-dev" target="_blank" class="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow border border-slate-200">
+                            <h4 class="font-bold text-slate-800">🤝 Open Collective</h4><p class="mt-2 text-sm text-slate-600">Support our community and transparent budget.</p>
+                        </a>
+                        <a href="https://ko-fi.com/memarzade-dev" target="_blank" class="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow border border-slate-200">
+                           <h4 class="font-bold text-slate-800">☕ Ko-fi</h4><p class="mt-2 text-sm text-slate-600">A small, one-time thank you.</p>
+                        </a>
+                        <a href="https://www.buymeacoffee.com/memarzade-dev" target="_blank" class="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow border border-slate-200">
+                           <h4 class="font-bold text-slate-800">🍵 Buy Me a Coffee</h4><p class="mt-2 text-sm text-slate-600">Another way to show your appreciation.</p>
+                        </a>
+                    </div>`,
+                'Security & Compliance': `
+                    <p class="text-slate-600 mb-6">Smart Rename Pro is backed by Tidelift, providing a commercially supported and actively maintained open source solution.</p>
+                    <ul class="space-y-4 list-disc list-inside text-slate-700">
+                        <li><span class="font-semibold">Proactive Security:</span> Continuous vulnerability management and alignment with security standards like OWASP and NIST.</li>
+                        <li><span class="font-semibold">Full Compliance:</span> We support standards like ISO 27001, SOC 2, and GDPR, giving your organization legal peace of mind.</li>
+                        <li><span class="font-semibold">Guaranteed Support:</span> Get peace of mind with 24/7 enterprise support, dedicated SLAs, and automated updates to keep your tools secure and up-to-date.</li>
+                    </ul>`,
+                'Professional Services': `
+                    <p class="text-slate-600 mb-6">Beyond standard support, our team offers a range of professional services to help your team succeed and integrate Smart Rename Pro seamlessly into your workflows.</p>
+                    <ul class="space-y-4 list-disc list-inside text-slate-700">
+                        <li><span class="font-semibold">Consulting & Architecture Design</span></li>
+                        <li><span class="font-semibold">Custom Development & Integration</span></li>
+                        <li><span class="font-semibold">Performance Optimization & Security Audits</span></li>
+                        <li><span class="font-semibold">Technical Documentation & Team Training</span></li>
+                    </ul>`
+            };
+
+            Object.keys( enterpriseData ).forEach( ( tabName, index ) => {
+                const tabButton = document.createElement( 'button' );
+                tabButton.className = 'tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-slate-500 hover:text-indigo-600 hover:border-indigo-300 transition-colors';
+                tabButton.textContent = tabName;
+                tabButton.dataset.tab = tabName;
+                enterpriseTabs.appendChild( tabButton );
+
+                const tabContentPanel = document.createElement( 'div' );
+                tabContentPanel.className = 'tab-content';
+                tabContentPanel.id = `tab-panel-${ tabName.replace( / /g, '-' ) }`;
+                tabContentPanel.innerHTML = enterpriseData[ tabName ];
+                enterpriseTabContent.appendChild( tabContentPanel );
+            } );
+
+            function updateEnterpriseTab( tabName ) {
+                document.querySelectorAll( '.tab-button' ).forEach( btn => {
+                    btn.classList.toggle( 'active', btn.dataset.tab === tabName );
+                    btn.classList.toggle( 'border-indigo-500', btn.dataset.tab === tabName );
+                    btn.classList.toggle( 'text-indigo-600', btn.dataset.tab === tabName );
+                    btn.classList.toggle( 'border-transparent', btn.dataset.tab !== tabName );
+                } );
+                document.querySelectorAll( '.tab-content' ).forEach( panel => {
+                    panel.classList.toggle( 'active', panel.id === `tab-panel-${ tabName.replace( / /g, '-' ) }` );
+                    if ( panel.id === `tab-panel-${ tabName.replace( / /g, '-' ) }` ) {
+                        panel.classList.add( 'fade-in' );
+                    }
+                } );
+            }
+
+            enterpriseTabs.addEventListener( 'click', e => {
+                if ( e.target.matches( '.tab-button' ) ) {
+                    updateEnterpriseTab( e.target.dataset.tab );
+                }
+            } );
+
+
+            // --- Initial State Setup ---
+            updateFeatureContent( 0 );
+            updateEnterpriseTab( Object.keys( enterpriseData )[ 0 ] );
+        } );
+
+        // --- Clipboard Logic ---
+        function copyToClipboard( button ) {
+            const codeBlock = button.nextElementSibling;
+            const textToCopy = codeBlock.innerText;
+
+            const textarea = document.createElement( 'textarea' );
+            textarea.value = textToCopy;
+            document.body.appendChild( textarea );
+            textarea.select();
+            document.execCommand( 'copy' );
+            document.body.removeChild( textarea );
+
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout( () => {
+                button.textContent = originalText;
+            }, 2000 );
+        }
+    </script>
+
+</body>
+
+</html>
