@@ -25,7 +25,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from smart_rename_pro import DirectoryProcessor, ReplaceConfig
+from smart_rename_pro import DirectoryProcessor, ReplaceConfig, SmartRenameError
 
 # --- Modern Dark Theme Stylesheet ---
 CHIC_DARK_STYLESHEET = """
@@ -357,20 +357,24 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Error", "Please enter text to search for.")
             return
 
-        config = ReplaceConfig(
-            directory=dir_path,
-            search_text=search_text,
-            replace_text=replace_text,
-            recursive=self.recursive_checkbox.isChecked(),
-        )
+        try:
+            config = ReplaceConfig(
+                directory=Path(dir_path),
+                search_term=search_text,
+                replace_term=replace_text,
+                dry_run=True,  # Always use dry run in GUI for safety
+            )
 
-        self.start_btn.setEnabled(False)
-        self.log_display.clear()
+            self.start_btn.setEnabled(False)
+            self.log_display.clear()
 
-        self.worker = RenameWorker(config)
-        self.worker.progress.connect(self.update_log)
-        self.worker.finished.connect(self.on_finished)
-        self.worker.start()
+            self.worker = RenameWorker(config)
+            self.worker.progress.connect(self.update_log)
+            self.worker.finished.connect(self.on_finished)
+            self.worker.start()
+        except SmartRenameError as e:
+            QMessageBox.warning(self, "Error", str(e))
+            self.start_btn.setEnabled(True)
 
     def update_log(self, message):
         """Update the log display with a new message.

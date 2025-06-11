@@ -21,9 +21,10 @@ def test_date_pattern_matching():
 
 def test_date_format_validation():
     """Test validation of date format."""
+    # Use an invalid date that matches a date-like pattern
     with pytest.raises(SmartRenameError):
         ReplaceConfig(
-            search_term="invalid-date",
+            search_term="2023-13-01",  # Invalid month
             replace_term="2024-01-01",
             directory=Path("test_dir"),
             dry_run=True,

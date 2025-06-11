@@ -26,12 +26,17 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install -r requirements-dev.txt
     - name: Run linting
       run: |
         flake8 . --max-line-length=120 --extend-ignore=E203
     - name: Run tests with coverage
       run: |
         pytest tests/ --cov=smart_rename_pro --cov-report=xml
+    - name: Run GUI tests
+      if: runner.os == 'Linux'  # GUI tests only on Linux
+      run: |
+        pytest tests/ --qt-api=pyqt6
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:

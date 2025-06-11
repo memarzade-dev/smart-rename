@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Rename Pro - Infographic</title>
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: This infographic is designed as a vertical storytelling journey. It starts with a high-impact Hero section to introduce the tool. The "Key Features" section uses a two-column grid with icon-like Unicode characters for quick visual scanning. The "Getting Started" guide is presented as a timeline-like process flow using structured HTML/CSS for clarity. The "Enterprise & Support" section utilizes cards for different tiers and a comparison table, making it easy to see the value propositions. This top-down structure guides the user from what the tool is, to how to use it, and finally how to get professional support, creating a clear and persuasive narrative. -->
+    <!-- Visualization & Content Choices:
+        - Market Size/Growth (Hero): Report Info -> Project Title -> Goal: Inform -> Viz/Method: Large, bold typography ('Single Big Number' style) -> Justification: Immediately establishes the tool's identity and purpose. (HTML/CSS)
+        - Key Features (Market Share): Report Info -> Features List -> Goal: Compare/Organize -> Viz/Method: A grid of cards with Unicode icons -> Justification: Breaks down features into digestible, visually distinct points. (HTML/CSS)
+        - Getting Started (Process Flow): Report Info -> Installation/Usage -> Goal: Organize -> Viz/Method: A vertical, numbered timeline created with structured HTML and Tailwind CSS -> Justification: Presents a clear, step-by-step process that is easy to follow. (HTML/CSS)
+        - Support Tiers (Competitive Landscape): Report Info -> Sponsorship Table -> Goal: Compare -> Viz/Method: A responsive grid of styled cards for each support platform -> Justification: Allows for easy comparison of different support options. (HTML/CSS)
+        - Professional Services (Consumer Demographics): Report Info -> Services List -> Goal: Inform -> Viz/Method: A simple, clean list within a styled card -> Justification: Clearly presents the services offered without clutter. (HTML/CSS)
+        - All interactions are handled with vanilla JS for lightweight functionality like copy-to-clipboard. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FEFBF6;
+            /* Light Cream */
+            color: #3D3B3C;
+            /* Dark Gray */
+        }
+
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .bg-hero {
+            background-color: #FFD166;
+            /* Sunglow Yellow */
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-primary {
+            background-color: #06D6A0;
+            /* Caribbean Green */
+            color: #111;
+            font-weight: 700;
+        }
+
+        .btn-secondary {
+            background-color: #118AB2;
+            /* Blue Sapphire */
+            color: #FFF;
+            font-weight: 700;
+        }
+
+        .section-title {
+            color: #EF476F;
+            /* Paradise Pink */
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 1.25rem;
+            top: 1.25rem;
+            bottom: -1.25rem;
+            width: 2px;
+            background-color: #06D6A0;
+            /* Caribbean Green */
+            transform: translateX(-50%);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-number {
+            background-color: #06D6A0;
+            color: #111;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-hero py-4 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-[#3D3B3C]">🌟 Smart Rename Pro: Enterprise Edition 🌟
+            </h1>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+
+        <!-- Section: Overview -->
+        <section id="overview" class="text-center mb-20 md:mb-28">
+            <h2 class="text-4xl md:text-6xl font-extrabold section-title mb-4">An Intelligent Refactoring Engine</h2>
+            <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-600">
+                More than a utility, Smart Rename Pro understands your code's structure, performing complex batch
+                renaming on files, directories, and their content while preserving case patterns.
+            </p>
+        </section>
+
+        <!-- Section: Key Features -->
+        <section id="features" class="mb-20 md:mb-28">
+            <h3 class="text-3xl md:text-4xl font-bold text-center section-title mb-12">Core Capabilities</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card p-6 flex items-start space-x-4">
+                    <span class="text-4xl">🧠</span>
+                    <div>
+                        <h4 class="font-bold text-xl mb-1">Intelligent Case</h4>
+                        <p class="text-slate-600">Automatically detects and applies `camelCase`, `PascalCase`,
+                            `snake_case`, and `UPPERCASE` patterns.</p>
+                    </div>
+                </div>
+                <div class="card p-6 flex items-start space-x-4">
+                    <span class="text-4xl">🔍</span>
+                    <div>
+                        <h4 class="font-bold text-xl mb-1">Content Replacement</h4>
+                        <p class="text-slate-600">Searches and replaces terms deep within the content of your text-based
+                            files.</p>
+                    </div>
+                </div>
+                <div class="card p-6 flex items-start space-x-4">
+                    <span class="text-4xl">⚙️</span>
+                    <div>
+                        <h4 class="font-bold text-xl mb-1">Config Driven</h4>
+                        <p class="text-slate-600">Manage complex operations easily using a clear and simple `config.yml`
+                            file.</p>
+                    </div>
+                </div>
+                <div class="card p-6 flex items-start space-x-4">
+                    <span class="text-4xl">⚡️</span>
+                    <div>
+                        <h4 class="font-bold text-xl mb-1">Concurrency Support</h4>
+                        <p class="text-slate-600">Utilizes multiple worker threads for significantly faster processing
+                            of large projects.</p>
+                    </div>
+                </div>
+                <div class="card p-6 flex items-start space-x-4">
+                    <span class="text-4xl">🙈</span>
+                    <div>
+                        <h4 class="font-bold text-xl mb-1">Ignore File Support</h4>
+                        <p class="text-slate-600">Natively respects rules in `.gitignore` files to avoid unwanted
+                            changes.</p>
+                    </div>
+                </div>
+                <div class="card p-6 flex items-start space-x-4">
+                    <span class="text-4xl">🧪</span>
+                    <div>
+                        <h4 class="font-bold text-xl mb-1">Dry Run Mode</h4>
+                        <p class="text-slate-600">Preview all potential changes safely without modifying a single file
+                            on your disk.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Getting Started -->
+        <section id="getting-started" class="mb-20 md:mb-28">
+            <h3 class="text-3xl md:text-4xl font-bold text-center section-title mb-12">Get Started in 3 Steps</h3>
+            <div class="max-w-3xl mx-auto">
+                <div class="relative">
+                    <div class="timeline-item relative pl-10 pb-10">
+                        <div
+                            class="timeline-number absolute left-0 h-10 w-10 rounded-full flex items-center justify-center font-bold text-xl">
+                            1</div>
+                        <div class="card p-6 ml-4">
+                            <h4 class="font-bold text-xl mb-2">Install</h4>
+                            <p class="text-slate-600 mb-4">Clone the repository and install the dependencies.</p>
+                            <div class="font-mono bg-slate-100 rounded p-3 text-sm relative">
+                                <button onclick="copyToClipboard(this)"
+                                    class="absolute top-2 right-2 bg-slate-200 text-slate-600 text-xs font-bold py-1 px-2 rounded hover:bg-slate-300 transition">Copy</button>
+                                <pre>git clone https://github.com/memarzade-dev/smart-rename.git
+cd smart-rename
+pip install -r requirements.txt</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item relative pl-10 pb-10">
+                        <div
+                            class="timeline-number absolute left-0 h-10 w-10 rounded-full flex items-center justify-center font-bold text-xl">
+                            2</div>
+                        <div class="card p-6 ml-4">
+                            <h4 class="font-bold text-xl mb-2">Run a Basic Command</h4>
+                            <p class="text-slate-600 mb-4">Execute a simple find-and-replace operation.</p>
+                            <div class="font-mono bg-slate-100 rounded p-3 text-sm relative">
+                                <button onclick="copyToClipboard(this)"
+                                    class="absolute top-2 right-2 bg-slate-200 text-slate-600 text-xs font-bold py-1 px-2 rounded hover:bg-slate-300 transition">Copy</button>
+                                <pre>python smart_rename_pro.py --directory ./my-project --search "OldName" --replace "NewName"</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item relative pl-10">
+                        <div
+                            class="timeline-number absolute left-0 h-10 w-10 rounded-full flex items-center justify-center font-bold text-xl">
+                            3</div>
+                        <div class="card p-6 ml-4">
+                            <h4 class="font-bold text-xl mb-2">Use a Config File</h4>
+                            <p class="text-slate-600 mb-4">For advanced usage, run the tool with a configuration file.
+                            </p>
+                            <div class="font-mono bg-slate-100 rounded p-3 text-sm relative">
+                                <button onclick="copyToClipboard(this)"
+                                    class="absolute top-2 right-2 bg-slate-200 text-slate-600 text-xs font-bold py-1 px-2 rounded hover:bg-slate-300 transition">Copy</button>
+                                <pre>python smart_rename_pro.py --directory ./my-project --config config.yml</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Support & Sponsorship -->
+        <section id="sponsorship">
+            <h3 class="text-3xl md:text-4xl font-bold text-center section-title mb-12">Support & Sponsorship</h3>
+            <p class="max-w-3xl mx-auto text-center text-lg text-slate-600 mb-12">
+                This open-source initiative thrives on community support. Consider supporting its development if you
+                find it useful.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <a href="https://github.com/sponsors/memarzade-dev" target="_blank" class="card p-6 block text-center">
+                    <h4 class="font-bold text-xl mb-2">💼 GitHub Sponsors</h4>
+                    <p class="text-slate-600">Primary sponsorship platform.</p>
+                </a>
+                <a href="https://tidelift.com/subscription/pkg/npm-smart-rename" target="_blank"
+                    class="card p-6 block text-center">
+                    <h4 class="font-bold text-xl mb-2">🛡️ Tidelift</h4>
+                    <p class="text-slate-600">Commercial support and security assurance.</p>
+                </a>
+                <a href="https://opencollective.com/memarzade-dev" target="_blank" class="card p-6 block text-center">
+                    <h4 class="font-bold text-xl mb-2">🤝 Open Collective</h4>
+                    <p class="text-slate-600">Support our community and transparent budget.</p>
+                </a>
+                <a href="https://ko-fi.com/memarzade-dev" target="_blank" class="card p-6 block text-center">
+                    <h4 class="font-bold text-xl mb-2">☕ Ko-fi</h4>
+                    <p class="text-slate-600">A small, one-time thank you.</p>
+                </a>
+                <a href="https://www.buymeacoffee.com/memarzade-dev" target="_blank" class="card p-6 block text-center">
+                    <h4 class="font-bold text-xl mb-2">🍵 Buy Me a Coffee</h4>
+                    <p class="text-slate-600">Another way to show your appreciation.</p>
+                </a>
+                <div class="card p-6 text-center">
+                    <h4 class="font-bold text-xl mb-2">📚 Professional Services</h4>
+                    <p class="text-slate-600">Consulting, custom development, and training.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-20 md:mt-28 border-t-4 border-dashed border-[#FFD166] py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h3 class="text-2xl font-bold text-slate-800">Ready to Refactor?</h3>
+            <p class="text-slate-600 mt-2 mb-6">Get the source code and contribute on GitHub.</p>
+            <a href="https://github.com/memarzade-dev/smart-rename" target="_blank"
+                class="inline-block rounded-lg px-8 py-3 text-lg font-bold btn-secondary shadow-lg hover:shadow-xl transition-shadow">
+                View on GitHub
+            </a>
+            <p class="mt-10 text-sm text-slate-500">
+                Authored by Ali Memarzade. Licensed under MIT.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function copyToClipboard( button ) {
+            const pre = button.nextElementSibling;
+            const textToCopy = pre.innerText;
+
+            navigator.clipboard.writeText( textToCopy ).then( () => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.backgroundColor = '#06D6A0';
+                button.style.color = '#111';
+                setTimeout( () => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                }, 2000 );
+            } ).catch( err => {
+                console.error( 'Failed to copy: ', err );
+            } );
+        }
+    </script>
+</body>
+
+</html>

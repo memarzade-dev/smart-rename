@@ -87,37 +87,143 @@ class ReplaceConfig:
     def _looks_like_date(text: str) -> bool:
         """Check if text looks like a date."""
         date_patterns = [
-            r"\d{4}-\d{2}-\d{2}",  # YYYY-MM-DD
-            r"\d{2}/\d{2}/\d{4}",  # MM/DD/YYYY
-            r"\d{4}/\d{2}/\d{2}",  # YYYY/MM/DD
-            r"\d{2}-\d{2}-\d{4}",  # DD-MM-YYYY
-            r"\d{4}\.\d{2}\.\d{2}",  # YYYY.MM.DD
-            r"\d{2}\.\d{2}\.\d{4}",  # DD.MM.YYYY
+            r"^\d{4}-\d{2}-\d{2}$",  # YYYY-MM-DD
+            r"^\d{2}/\d{2}/\d{4}$",  # MM/DD/YYYY
+            r"^\d{4}/\d{2}/\d{2}$",  # YYYY/MM/DD
+            r"^\d{2}-\d{2}-\d{4}$",  # DD-MM-YYYY
+            r"^\d{4}\.\d{2}\.\d{2}$",  # YYYY.MM.DD
+            r"^\d{2}\.\d{2}\.\d{4}$",  # DD.MM.YYYY
+            r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$",  # YYYY-MM-DD HH:MM
+            r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2} \w+$",  # YYYY-MM-DD HH:MM TZ
+            r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{1,6}$",  # YYYY-MM-DD HH:MM:SS.fff
+            r"^\w+, \d{4}-\d{2}-\d{2}$",  # Weekday, YYYY-MM-DD
+            r"^[A-Za-z]+ \d{1,2}, \d{4}$",  # Month DD, YYYY
+            r"^[A-Za-z]+ \d{4}$",  # Season YYYY or Quarter YYYY
+            r"^(yesterday|today|tomorrow)$",  # Relative dates
+            r"^Age \d+ \d{4}$",  # Age YYYY
+            r"^Week \d+, \d{4}$",  # Week N, YYYY
+            r"^Day \d+, \d{4}$",  # Day N, YYYY
+            r"^\d{4} CE$",  # YYYY CE
+            r"^FY\d{4}$",  # FYYYYY
+            r"^\d{4}-\d{2}$",  # YYYY-MM (academic year)
+            # Project management/iteration patterns
+            r"^(Sprint|Iteration|Milestone|Phase|Stage|Cycle|Period) \d+ \d{4}$",  # e.g., Sprint 1 2023
         ]
-        return any(re.search(pattern, text) for pattern in date_patterns)
+        return any(re.match(pattern, text) for pattern in date_patterns)
 
     @staticmethod
     def _is_valid_date(text: str) -> bool:
         """Validate if text is a valid date."""
         try:
-            # Try common date formats
-            formats = [
-                "%Y-%m-%d",
-                "%m/%d/%Y",
-                "%Y/%m/%d",
-                "%d-%m-%Y",
-                "%Y.%m.%d",
-                "%d.%m.%Y",
-            ]
-            for fmt in formats:
-                try:
-                    datetime.strptime(text, fmt)
-                    return True
-                except ValueError:
-                    continue
+            # Handle special cases first
+            if ReplaceConfig._is_special_date(text):
+                return True
+
+            # Handle weekday prefix
+            text_clean = text.split(",", 1)[-1].strip() if "," in text else text
+
+            # Try standard formats
+            if ReplaceConfig._try_standard_formats(text_clean):
+                return True
+
+            # Try with different locales
+            if ReplaceConfig._try_locale_formats(text_clean):
+                return True
+
+            # Fallback: use dateutil for robust parsing
+            try:
+                from dateutil.parser import parse as dateutil_parse
+
+                dateutil_parse(text_clean)
+                return True
+            except Exception:
+                pass
+
             return False
         except Exception:
             return False
+
+    @staticmethod
+    def _is_special_date(text: str) -> bool:
+        """Check if text matches any special date patterns."""
+        special_patterns = [
+            r"^(yesterday|today|tomorrow)$",
+            r"^[A-Za-z]+ \d{4}$",  # Season YYYY or Quarter YYYY
+            r"^Age \d+ \d{4}$",  # Age YYYY
+            r"^Week \d+, \d{4}$",  # Week N, YYYY
+            r"^Day \d+, \d{4}$",  # Day N, YYYY
+            r"^\d{4} CE$",  # YYYY CE
+            r"^FY\d{4}$",  # FYYYYY
+            r"^\d{4}-\d{2}$",  # YYYY-MM (academic year)
+            r"^(Sprint|Iteration|Milestone|Phase|Stage|Cycle|Period) \d+ \d{4}$",  # Project patterns
+        ]
+        return any(re.match(pattern, text) for pattern in special_patterns)
+
+    @staticmethod
+    def _try_standard_formats(text: str) -> bool:
+        """Try parsing the text with standard date formats."""
+        formats = [
+            "%Y-%m-%d",  # YYYY-MM-DD
+            "%m/%d/%Y",  # MM/DD/YYYY
+            "%Y/%m/%d",  # YYYY/MM/DD
+            "%d-%m-%Y",  # DD-MM-YYYY
+            "%Y.%m.%d",  # YYYY.MM.DD
+            "%d.%m.%Y",  # DD.MM.YYYY
+            "%Y-%m-%d %H:%M",  # YYYY-MM-DD HH:MM
+            "%Y-%m-%d %H:%M %Z",  # YYYY-MM-DD HH:MM UTC
+            "%Y-%m-%d %H:%M:%S.%f",  # YYYY-MM-DD HH:MM:SS.fff
+            "%B %d, %Y",  # Month DD, YYYY
+            "%B %d %Y",  # Month DD YYYY
+            "%B %Y",  # Month YYYY
+            "%B %d",  # Month DD
+            "%B %d, %Y %H:%M",  # Month DD, YYYY HH:MM
+            "%B %d, %Y %H:%M:%S",  # Month DD, YYYY HH:MM:SS
+            "%B %d, %Y %H:%M:%S.%f",  # Month DD, YYYY HH:MM:SS.fff
+            "%B %d, %Y %Z",  # Month DD, YYYY TZ
+            "%B %d, %Y %Z %H:%M",  # Month DD, YYYY TZ HH:MM
+            "%B %d, %Y %Z %H:%M:%S",  # Month DD, YYYY TZ HH:MM:SS
+            "%B %d, %Y %Z %H:%M:%S.%f",  # Month DD, YYYY TZ HH:MM:SS.fff
+        ]
+        for fmt in formats:
+            try:
+                datetime.datetime.strptime(text, fmt)
+                return True
+            except ValueError:
+                continue
+        return False
+
+    @staticmethod
+    def _try_locale_formats(text: str) -> bool:
+        """Try parsing the text with different locale settings."""
+        import locale
+
+        formats = [
+            "%Y-%m-%d",  # YYYY-MM-DD
+            "%m/%d/%Y",  # MM/DD/YYYY
+            "%Y/%m/%d",  # YYYY/MM/DD
+            "%d-%m-%Y",  # DD-MM-YYYY
+            "%Y.%m.%d",  # YYYY.MM.DD
+            "%d.%m.%Y",  # DD.MM.YYYY
+            "%B %d, %Y",  # Month DD, YYYY
+            "%B %d %Y",  # Month DD YYYY
+            "%B %Y",  # Month YYYY
+            "%B %d",  # Month DD
+        ]
+        for loc in ["C", "en_US.UTF-8"]:
+            try:
+                old_locale = locale.setlocale(locale.LC_TIME)
+                locale.setlocale(locale.LC_TIME, loc)
+                for fmt in formats:
+                    try:
+                        datetime.datetime.strptime(text, fmt)
+                        locale.setlocale(locale.LC_TIME, old_locale)
+                        return True
+                    except ValueError:
+                        continue
+                locale.setlocale(locale.LC_TIME, old_locale)
+            except Exception:
+                continue
+        return False
 
     @classmethod
     def load_from_file(cls, config_path: Path) -> "ReplaceConfig":
@@ -333,11 +439,18 @@ class TextProcessor:
     @staticmethod
     def validate_term(term: str, term_type: str) -> None:
         """Validate search or replace term for invalid characters."""
-        invalid_chars = r'[<>:"/\\|?*]'
+        # Skip validation for terms that look like valid dates
+        if ReplaceConfig._looks_like_date(term) and ReplaceConfig._is_valid_date(term):
+            return
+
+        # Check for prohibited characters
+        invalid_chars = r'[<>:"\\|?*]'
         if re.search(invalid_chars, term):
             raise SmartRenameError(
                 f"Invalid {term_type} term '{term}' contains prohibited characters: {invalid_chars}"
             )
+
+        # Check for empty or whitespace-only terms
         if not term.strip():
             raise SmartRenameError(
                 f"{term_type.capitalize()} term cannot be empty or whitespace"
