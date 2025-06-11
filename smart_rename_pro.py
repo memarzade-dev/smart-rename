@@ -11,17 +11,19 @@ import pathspec
 import yaml
 import os
 
-# Configure logging with platform-specific log file path
-log_file = Path("rename.log").resolve()
+# Configure logging
 logging.basicConfig(
-    level=logging.DEBUG,  # Increased verbosity for debugging
-    format='%(asctime)s - %(levelname)s - %(name)s - [%(operation)s] - %(message)s',
-    handlers=[
-        logging.FileHandler(log_file, encoding='utf-8'),
-        logging.StreamHandler()
-    ]
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(name)s - [%(funcName)s] - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
 )
 logger = logging.getLogger(__name__)
+
+# Prevent duplicate logging
+logger.propagate = False
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - [%(funcName)s] - %(message)s'))
+logger.addHandler(handler)
 
 @dataclass
 class ReplaceConfig:
@@ -288,13 +290,21 @@ class DirectoryProcessor:
         """Process all directories and files recursively, respecting ignore patterns."""
         logger.info(f"Starting processing in directory: {config.directory}", extra={"operation": "process_directory"})
         
-        # Load .gitignore patterns
+        # Load .gitignore patterns ONCE
         gitignore_spec = IgnoreFileProcessor.load_gitignore_patterns(config.directory)
         
+        summary = {
+            "renamed": [],
+            "content_updated": [],
+            "references_updated": [],
+            "skipped": [],
+        }
+
         def process_single_item(item_path: Path, renamed_paths: List[Tuple[Path, Path]]) -> None:
             """Process a single file or directory."""
             if IgnoreFileProcessor.is_ignored(item_path, config.directory, gitignore_spec):
                 logger.debug(f"Skipping ignored item: {item_path}", extra={"operation": "process_item"})
+                summary["skipped"].append(str(item_path))
                 return
             
             try:
@@ -303,17 +313,22 @@ class DirectoryProcessor:
                     item_path, config.search_term, config.replace_term, config.dry_run
                 )
                 if renamed:
+                    summary["renamed"].append(f"{item_path} -> {new_path}")
                     renamed_paths.append((item_path, new_path))
                 
                 # Process file content if it's a text file
                 if new_path.is_file() and TextProcessor.is_text_file(new_path, config):
-                    FileHandler.process_file_content(
+                    changed = FileHandler.process_file_content(
                         new_path, config.search_term, config.replace_term, config.dry_run
                     )
+                    if changed:
+                        summary["content_updated"].append(str(new_path))
                 
                 # Update references to renamed paths
                 for old_path, new_path_ref in renamed_paths:
-                    FileHandler.update_path_references(new_path, old_path, new_path_ref, config.dry_run)
+                    changed = FileHandler.update_path_references(new_path, old_path, new_path_ref, config.dry_run)
+                    if changed:
+                        summary["references_updated"].append(str(new_path))
             except SmartRenameError as e:
                 logger.error(f"Processing failed for {item_path}: {e}", extra={"operation": "process_item"})
             except Exception as e:
@@ -344,6 +359,7 @@ class DirectoryProcessor:
                     dir_path, config.search_term, config.replace_term, config.dry_run
                 )
                 if renamed:
+                    summary["renamed"].append(f"{dir_path} -> {new_dir_path}")
                     renamed_paths.append((dir_path, new_dir_path))
             
             for file in files:
@@ -360,7 +376,9 @@ class DirectoryProcessor:
                         DirectoryProcessor._process_item,
                         item,
                         config,
-                        renamed_paths
+                        renamed_paths,
+                        gitignore_spec,
+                        summary
                     )
                 )
 
@@ -371,12 +389,30 @@ class DirectoryProcessor:
                     logger.error(f"Error in worker: {str(e)}")
 
         logger.info("Processing complete", extra={"operation": "process_directory"})
+        # Print summary
+        print("\n===== Smart Rename Summary =====")
+        if config.dry_run:
+            print("[DRY RUN] No changes were made.")
+        print(f"Renamed files/directories: {len(summary['renamed'])}")
+        for r in summary['renamed']:
+            print(f"  {r}")
+        print(f"Content updated: {len(summary['content_updated'])}")
+        for c in summary['content_updated']:
+            print(f"  {c}")
+        print(f"References updated: {len(summary['references_updated'])}")
+        for ref in summary['references_updated']:
+            print(f"  {ref}")
+        print(f"Skipped (ignored): {len(summary['skipped'])}")
+        for s in summary['skipped']:
+            print(f"  {s}")
+        print("==================================\n")
 
     @staticmethod
-    def _process_item(item_path: Path, config: ReplaceConfig, renamed_paths: List[Tuple[Path, Path]]) -> None:
+    def _process_item(item_path: Path, config: ReplaceConfig, renamed_paths: List[Tuple[Path, Path]], gitignore_spec, summary) -> None:
         """Process a single item (file or directory)."""
-        if IgnoreFileProcessor.is_ignored(item_path, config.directory, IgnoreFileProcessor.load_gitignore_patterns(config.directory)):
+        if IgnoreFileProcessor.is_ignored(item_path, config.directory, gitignore_spec):
             logger.debug(f"Skipping ignored item: {item_path}", extra={"operation": "process_item"})
+            summary["skipped"].append(str(item_path))
             return
         
         try:
@@ -385,17 +421,22 @@ class DirectoryProcessor:
                 item_path, config.search_term, config.replace_term, config.dry_run
             )
             if renamed:
+                summary["renamed"].append(f"{item_path} -> {new_path}")
                 renamed_paths.append((item_path, new_path))
             
             # Process file content if it's a text file
             if new_path.is_file() and TextProcessor.is_text_file(new_path, config):
-                FileHandler.process_file_content(
+                changed = FileHandler.process_file_content(
                     new_path, config.search_term, config.replace_term, config.dry_run
                 )
+                if changed:
+                    summary["content_updated"].append(str(new_path))
             
             # Update references to renamed paths
             for old_path, new_path_ref in renamed_paths:
-                FileHandler.update_path_references(new_path, old_path, new_path_ref, config.dry_run)
+                changed = FileHandler.update_path_references(new_path, old_path, new_path_ref, config.dry_run)
+                if changed:
+                    summary["references_updated"].append(str(new_path))
         except SmartRenameError as e:
             logger.error(f"Processing failed for {item_path}: {e}", extra={"operation": "process_item"})
         except Exception as e:
