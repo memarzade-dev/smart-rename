@@ -41,7 +41,7 @@ jobs:
     - name: Run GUI tests
       if: runner.os == 'Linux'  # GUI tests only on Linux
       run: |
-        pytest tests/ --qt-api=pyqt6
+        pytest tests/ --qt-api=pyqt6 --no-cov-on-fail
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
