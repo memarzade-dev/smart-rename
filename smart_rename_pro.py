@@ -2,7 +2,7 @@ import argparse
 import logging
 import platform
 import re
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, Tuple, List, Dict
@@ -34,6 +34,30 @@ class ReplaceConfig:
     exclude_extensions: Optional[List[str]] = None
     include_extensions: Optional[List[str]] = None
     dry_run: bool = False
+
+    def __post_init__(self):
+        self.exclude_extensions = self.exclude_extensions or []
+        self.include_extensions = self.include_extensions or []
+        self.max_workers = max(1, min(self.max_workers, 16))
+
+    @classmethod
+    def load_from_file(cls, config_path: Path) -> 'ReplaceConfig':
+        """Load configuration from YAML file."""
+        try:
+            with config_path.open('r', encoding='utf-8') as f:
+                config_data = yaml.safe_load(f)
+            return cls(
+                search_term=config_data['search_term'],
+                replace_term=config_data['replace_term'],
+                directory=Path(config_data.get('directory', '.')),
+                exclude_extensions=config_data.get('exclude_extensions', []),
+                include_extensions=config_data.get('include_extensions', []),
+                max_workers=config_data.get('max_workers', 4),
+                config_file=config_path,
+                dry_run=config_data.get('dry_run', False)
+            )
+        except Exception as e:
+            raise SmartRenameError(f"Error loading config: {str(e)}")
 
 class SmartRenameError(Exception):
     """Custom exception for Smart Rename errors."""
@@ -329,9 +353,53 @@ class DirectoryProcessor:
 
         # Process items in parallel
         with ThreadPoolExecutor(max_workers=config.max_workers) as executor:
-            executor.map(lambda fp: process_single_item(fp, renamed_paths), items_to_process)
+            futures = []
+            for item in items_to_process:
+                futures.append(
+                    executor.submit(
+                        DirectoryProcessor._process_item,
+                        item,
+                        config,
+                        renamed_paths
+                    )
+                )
+
+            for future in as_completed(futures):
+                try:
+                    future.result()
+                except Exception as e:
+                    logger.error(f"Error in worker: {str(e)}")
 
         logger.info("Processing complete", extra={"operation": "process_directory"})
+
+    @staticmethod
+    def _process_item(item_path: Path, config: ReplaceConfig, renamed_paths: List[Tuple[Path, Path]]) -> None:
+        """Process a single item (file or directory)."""
+        if IgnoreFileProcessor.is_ignored(item_path, config.directory, IgnoreFileProcessor.load_gitignore_patterns(config.directory)):
+            logger.debug(f"Skipping ignored item: {item_path}", extra={"operation": "process_item"})
+            return
+        
+        try:
+            # Process path name
+            new_path, renamed = FileHandler.process_path_name(
+                item_path, config.search_term, config.replace_term, config.dry_run
+            )
+            if renamed:
+                renamed_paths.append((item_path, new_path))
+            
+            # Process file content if it's a text file
+            if new_path.is_file() and TextProcessor.is_text_file(new_path, config):
+                FileHandler.process_file_content(
+                    new_path, config.search_term, config.replace_term, config.dry_run
+                )
+            
+            # Update references to renamed paths
+            for old_path, new_path_ref in renamed_paths:
+                FileHandler.update_path_references(new_path, old_path, new_path_ref, config.dry_run)
+        except SmartRenameError as e:
+            logger.error(f"Processing failed for {item_path}: {e}", extra={"operation": "process_item"})
+        except Exception as e:
+            logger.error(f"Unexpected error processing {item_path}: {e}", extra={"operation": "process_item"})
 
 def load_config_file(config_file: Path) -> Dict:
     """Load configuration from a YAML file."""
