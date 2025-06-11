@@ -6,13 +6,14 @@ A professional Python script for intelligently renaming files, directories, and 
 - **Smart Renaming**: Renames files and directories containing the search term, preserving case (e.g., `source` → `destination`, `Source` → `Destination`, `SOURCE` → `DESTINATION`).
 - **Content Replacement**: Updates occurrences of the search term in text file contents, including in variables or concatenated strings (e.g., `source=1` → `destination=1`).
 - **Path Reference Updates**: Automatically updates references to renamed files or directories in text files (e.g., `import source_payments` → `import destination_payments`).
+- **Ignore Support**: Respects `.gitignore` patterns, skipping files and directories like logs, build artifacts, or `.git/`.
 - **Comprehensive File Support**: Processes all common text file formats (`.php`, `.js`, `.py`, `.json`, `.md`, etc.).
 - **Configuration File**: Supports a `.smart-rename.yaml` file for customizable settings (e.g., exclude/include extensions).
 - **Parallel Processing**: Uses multithreading for efficient processing of large projects.
 - **Robust Encoding Handling**: Detects file encodings using `chardet` to handle various text formats.
 - **Logging**: Detailed logs saved to `rename.log` and displayed in the console.
-- **CI/CD Pipeline**: Automated testing, linting, and release creation via GitHub Actions.
-- **Unit Tests**: Comprehensive tests for key functionalities, including non-ASCII and special characters.
+- **CI/CD Pipeline**: Automated testing, linting, coverage, and release creation via GitHub Actions.
+- **Unit Tests**: Comprehensive tests for key functionalities, including non-ASCII, special characters, and ignore patterns.
 - **Docker Support**: Run the script in a containerized environment.
 - **Executable Build**: Supports building a Windows `.exe` for easy distribution.
 
@@ -51,12 +52,20 @@ exclude_extensions:
 include_extensions:
   - .php
   - .js
-  - .txt
 ```
 Run with config file:
 ```bash
 python smart_rename_pro.py --directory /path/to/project --config .smart-rename.yaml
 ```
+
+### Ignore Support
+The script automatically respects `.gitignore` patterns in the project directory. For example:
+```gitignore
+*.log
+dist/
+.git/
+```
+Files and directories matching these patterns (e.g., `rename.log`, `dist/`, `.git/`) will be skipped during processing.
 
 ### Example
 To replace `source` with `destination` in a project:
@@ -68,6 +77,7 @@ This will:
 - Rename `source_config.php` to `destination_config.php`.
 - Update content like `use source_payments;` to `use destination_payments;`.
 - Preserve case: `SourcePayments` → `DestinationPayments`.
+- Skip ignored files like `rename.log` or `.git/`.
 
 ## Docker Support
 Run the script in a Docker container:

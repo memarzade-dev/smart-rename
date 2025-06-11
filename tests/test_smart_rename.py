@@ -4,7 +4,7 @@ import shutil
 from pathlib import Path
 import pytest
 import yaml
-from smart_rename_pro import TextProcessor, FileHandler, ReplaceConfig, DirectoryProcessor, load_config_file
+from smart_rename_pro import TextProcessor, FileHandler, ReplaceConfig, DirectoryProcessor, load_config_file, IgnoreFileProcessor
 
 @pytest.fixture
 def temp_dir():
@@ -15,11 +15,11 @@ def temp_dir():
 
 def test_get_case_pattern():
     """Test case pattern detection."""
-    assert TextProcessor.get_case_pattern("source", "source") == "lower"
-    assert TextProcessor.get_case_pattern("source", "SOURCE") == "upper"
-    assert TextProcessor.get_case_pattern("source", "Source") == "title"
-    assert TextProcessor.get_case_pattern("source", "sOuRcE") == "custom"
-    assert TextProcessor.get_case_pattern("پرداخت", "پرداخت") == "custom"
+    assert TextProcessor.get_case_pattern("source") == "lower"
+    assert TextProcessor.get_case_pattern("SOURCE") == "upper"
+    assert TextProcessor.get_case_pattern("Source") == "title"
+    assert TextProcessor.get_case_pattern("sOuRcE") == "custom"
+    assert TextProcessor.get_case_pattern("پرداخت") == "custom"
 
 def test_apply_case_structure():
     """Test case structure application."""
@@ -102,14 +102,13 @@ def test_update_path_references(temp_dir):
     test_file = os.path.join(temp_dir, "test.php")
     with open(test_file, 'w', encoding='utf-8') as f:
         f.write("require 'source_payments/config.php';")
-
-    # Call with all required arguments
-    FileHandler.update_path_references(
-        os.path.join(temp_dir, "source_payments"),
-        os.path.join(temp_dir, "destination_payments"),
-        "source",
-        "destination"
+    
+    result = FileHandler.update_path_references(
+        test_file, 
+        os.path.join(temp_dir, "source_payments"), 
+        os.path.join(temp_dir, "destination_payments")
     )
+    assert result is True
     with open(test_file, 'r', encoding='utf-8') as f:
         content = f.read()
     assert "destination_payments/config.php" in content
@@ -154,6 +153,51 @@ def test_load_config_file(temp_dir):
     
     loaded_config = load_config_file(config_file)
     assert loaded_config == config_data
+
+def test_ignore_gitignore_files(temp_dir):
+    """Test ignoring files specified in .gitignore."""
+    # Create .gitignore
+    gitignore_file = os.path.join(temp_dir, ".gitignore")
+    with open(gitignore_file, 'w', encoding='utf-8') as f:
+        f.write("*.log\nignored_dir/")
+    
+    # Create test structure
+    os.makedirs(os.path.join(temp_dir, "ignored_dir"))
+    test_file = os.path.join(temp_dir, "source_config.php")
+    ignored_file = os.path.join(temp_dir, "source.log")
+    ignored_dir_file = os.path.join(temp_dir, "ignored_dir", "source_config.php")
+    
+    with open(test_file, 'w', encoding='utf-8') as f:
+        f.write("Source payment")
+    with open(ignored_file, 'w', encoding='utf-8') as f:
+        f.write("Source payment")
+    with open(ignored_dir_file, 'w', encoding='utf-8') as f:
+        f.write("Source payment")
+    
+    config = ReplaceConfig(
+        search_term="source",
+        replace_term="destination",
+        directory=temp_dir,
+        max_workers=1
+    )
+    
+    DirectoryProcessor.process_directory(config)
+    
+    # Check that non-ignored file was processed
+    assert os.path.exists(os.path.join(temp_dir, "destination_config.php"))
+    with open(os.path.join(temp_dir, "destination_config.php"), 'r', encoding='utf-8') as f:
+        content = f.read()
+    assert content == "Destination payment"
+    
+    # Check that ignored files were not processed
+    assert os.path.exists(ignored_file)
+    assert os.path.exists(ignored_dir_file)
+    with open(ignored_file, 'r', encoding='utf-8') as f:
+        content = f.read()
+    assert content == "Source payment"
+    with open(ignored_dir_file, 'r', encoding='utf-8') as f:
+        content = f.read()
+    assert content == "Source payment"
 
 def test_utf16_encoding(temp_dir):
     """Test handling of UTF-16 encoded files."""
