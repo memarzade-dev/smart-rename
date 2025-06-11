@@ -6,7 +6,9 @@ various file encodings.
 """
 
 import argparse
+import datetime
 import logging
+import os
 import re
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -18,13 +20,26 @@ import pathspec
 import yaml
 
 # Configure logging with platform-specific log file path
-log_file = Path("rename.log").resolve()
+log_dir = Path(os.path.expanduser("~")) / ".smart_rename_pro"
+log_dir.mkdir(exist_ok=True)
+log_file = log_dir / "smart_rename_pro.log"
+
 logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(name)s - [%(operation)s] - %(message)s",
-    handlers=[logging.FileHandler(log_file, encoding="utf-8"), logging.StreamHandler()],
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(log_file),
+        logging.StreamHandler(),
+    ],
 )
+
 logger = logging.getLogger(__name__)
+
+
+class SmartRenameError(Exception):
+    """Custom exception for Smart Rename Pro errors."""
+
+    pass
 
 
 @dataclass
@@ -50,6 +65,60 @@ class ReplaceConfig:
         self.include_extensions = self.include_extensions or []
         self.max_workers = max(1, min(self.max_workers, 16))
 
+        # Validate search and replace terms
+        TextProcessor.validate_term(self.search_term, "search")
+        TextProcessor.validate_term(self.replace_term, "replace")
+
+        # Validate date format if it looks like a date
+        if self._looks_like_date(self.search_term) and not self._is_valid_date(
+            self.search_term
+        ):
+            raise SmartRenameError(
+                f"Invalid date format in search term: {self.search_term}"
+            )
+        if self._looks_like_date(self.replace_term) and not self._is_valid_date(
+            self.replace_term
+        ):
+            raise SmartRenameError(
+                f"Invalid date format in replace term: {self.replace_term}"
+            )
+
+    @staticmethod
+    def _looks_like_date(text: str) -> bool:
+        """Check if text looks like a date."""
+        date_patterns = [
+            r"\d{4}-\d{2}-\d{2}",  # YYYY-MM-DD
+            r"\d{2}/\d{2}/\d{4}",  # MM/DD/YYYY
+            r"\d{4}/\d{2}/\d{2}",  # YYYY/MM/DD
+            r"\d{2}-\d{2}-\d{4}",  # DD-MM-YYYY
+            r"\d{4}\.\d{2}\.\d{2}",  # YYYY.MM.DD
+            r"\d{2}\.\d{2}\.\d{4}",  # DD.MM.YYYY
+        ]
+        return any(re.search(pattern, text) for pattern in date_patterns)
+
+    @staticmethod
+    def _is_valid_date(text: str) -> bool:
+        """Validate if text is a valid date."""
+        try:
+            # Try common date formats
+            formats = [
+                "%Y-%m-%d",
+                "%m/%d/%Y",
+                "%Y/%m/%d",
+                "%d-%m-%Y",
+                "%Y.%m.%d",
+                "%d.%m.%Y",
+            ]
+            for fmt in formats:
+                try:
+                    datetime.strptime(text, fmt)
+                    return True
+                except ValueError:
+                    continue
+            return False
+        except Exception:
+            return False
+
     @classmethod
     def load_from_file(cls, config_path: Path) -> "ReplaceConfig":
         """Load configuration from YAML file."""
@@ -68,12 +137,6 @@ class ReplaceConfig:
             )
         except Exception as e:
             raise SmartRenameError(f"Error loading config: {str(e)}")
-
-
-class SmartRenameError(Exception):
-    """Custom exception for Smart Rename errors."""
-
-    pass
 
 
 class TextProcessor:

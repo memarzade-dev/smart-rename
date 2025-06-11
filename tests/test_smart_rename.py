@@ -153,9 +153,9 @@ def test_file_extensions():
         replace_term="new",
         directory=Path("test_dir"),
         dry_run=True,
-        file_extensions=[".txt", ".md"],
+        include_extensions=[".txt", ".md"],
     )
-    assert config.file_extensions == [".txt", ".md"]
+    assert config.include_extensions == [".txt", ".md"]
 
 
 def test_gitignore():
