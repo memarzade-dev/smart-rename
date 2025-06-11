@@ -11,11 +11,15 @@ import pathspec
 import yaml
 import os
 
-# Configure logging
+# Configure logging with platform-specific log file path
+log_file = Path("rename.log").resolve()
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(name)s - [%(funcName)s] - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format='%(asctime)s - %(levelname)s - %(name)s - [%(operation)s] - %(message)s',
+    handlers=[
+        logging.FileHandler(log_file, encoding='utf-8'),
+        logging.StreamHandler()
+    ]
 )
 logger = logging.getLogger(__name__)
 
@@ -199,14 +203,11 @@ class FileHandler:
                 r'(?<!\w)' + re.escape(search_term) + r'(?!\w)',
                 re.IGNORECASE | re.UNICODE
             )
-            
             def replacement(match):
                 matched_text = match.group(0)
                 case_pattern = TextProcessor.get_case_pattern(matched_text)
                 return TextProcessor.apply_case_structure(replace_term, case_pattern, matched_text)
-
             new_path_name = pattern.sub(replacement, path_name)
-            
             if new_path_name != path_name:
                 new_path = path.parent / new_path_name
                 if not dry_run:
@@ -229,19 +230,15 @@ class FileHandler:
             encoding = TextProcessor.detect_encoding(file_path)
             with file_path.open('r', encoding=encoding, errors='replace') as file:
                 content = file.read()
-
             pattern = re.compile(
                 r'(?<!\w)' + re.escape(search_term) + r'(?!\w)',
                 re.IGNORECASE | re.UNICODE
             )
-            
             def replacement(match):
                 matched_text = match.group(0)
                 case_pattern = TextProcessor.get_case_pattern(matched_text)
                 return TextProcessor.apply_case_structure(replace_term, case_pattern, matched_text)
-
             new_content = pattern.sub(replacement, content)
-
             if new_content != content:
                 if not dry_run:
                     with file_path.open('w', encoding=encoding) as file:

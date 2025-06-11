@@ -14,11 +14,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
@@ -28,26 +28,28 @@ jobs:
         pip install -r requirements.txt
     - name: Run linting
       run: |
-        flake8 .
+        flake8 . --max-line-length=120 --extend-ignore=E203
     - name: Run tests with coverage
       run: |
         pytest tests/ --cov=smart_rename_pro --cov-report=xml
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         files: ./coverage.xml
         fail_ci_if_error: true
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   build-exe:
     runs-on: windows-latest
     needs: test
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version: "3.13"
         cache: 'pip'
     - name: Install dependencies
       run: |
@@ -57,12 +59,12 @@ jobs:
       run: |
         pyinstaller --onefile --name smart-rename smart_rename_pro.py
     - name: Upload executable
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: smart-rename-exe
         path: dist/smart-rename.exe
     - name: Release executable
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: dist/smart-rename.exe
       env:
