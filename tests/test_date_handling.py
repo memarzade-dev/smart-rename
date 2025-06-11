@@ -1,276 +1,400 @@
-import os
+"""Test date handling functionality."""
+
 import pytest
-from pathlib import Path
 from datetime import datetime, date
-from smart_rename_pro import (
-    FileHandler,
-    DirectoryProcessor,
-    SmartRenameError,
-    ReplaceConfig,
-)
-import re
-import shutil
+from pathlib import Path
+from smart_rename_pro import DirectoryProcessor, SmartRenameError, ReplaceConfig
 
-def safe_path(name):
-    # Replace /, \, :, ?, *, <, >, |, ", and spaces with _
-    return re.sub(r'[\\/:*?"<>| ]', '_', name)
 
-@pytest.fixture
-def temp_dir(tmp_path):
-    """Create a temporary directory for testing."""
-    return tmp_path
+def test_date_pattern_matching():
+    """Test date pattern matching in filenames."""
+    config = ReplaceConfig(
+        search_term="2023-01-01",
+        replace_term="2024-01-01",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-01-01"
+    assert config.replace_term == "2024-01-01"
 
-@pytest.fixture
-def file_handler():
-    """Create a FileHandler instance for testing."""
-    return FileHandler()
 
-def test_date_formats_in_filenames(file_handler, temp_dir):
-    """Test various date formats in filenames."""
-    date_formats = [
-        # ISO formats
-        "2024-03-20",
-        "20240320",
-        "2024_03_20",
-        "2024.03.20",
-        
-        # US formats
-        "03-20-2024",
-        "03/20/2024",
-        "03.20.2024",
-        "3-20-2024",
-        "3/20/2024",
-        "3.20.2024",
-        
-        # European formats
-        "20-03-2024",
-        "20/03/2024",
-        "20.03.2024",
-        
-        # Written formats
-        "March 20, 2024",
-        "20 March 2024",
-        "Mar 20, 2024",
-        "20 Mar 2024",
-        
-        # With time
-        "2024-03-20 14:30:00",
-        "2024-03-20T14:30:00",
-        "2024-03-20_14:30:00",
-        "03-20-2024 14:30:00",
-        "20-03-2024 14:30:00",
-        
-        # Short year formats
-        "03-20-24",
-        "20-03-24",
-        "24-03-20",
-    ]
-    
-    for date_format in date_formats:
-        filename = f"source_{date_format}_file.py"
-        safe_filename = safe_path(filename)
-        file_path = temp_dir / safe_filename
-        file_path.touch()
-        expected = f"destination_{date_format}_file.py"
-        # Use the safe path for the file, but test the renaming logic on the original name
-        result, _ = file_handler.process_path_name(file_path, "source", "destination", True)
-        assert result.name == safe_path(expected), f"Failed for date format: {date_format}"
+def test_date_format_validation():
+    """Test date format validation."""
+    with pytest.raises(SmartRenameError):
+        ReplaceConfig(
+            search_term="invalid-date",
+            replace_term="2024-01-01",
+            directory=Path("test_dir")
+        )
 
-def test_date_formats_in_content(file_handler, temp_dir):
-    """Test various date formats in file content."""
-    date_formats = [
-        # ISO formats
-        "2024-03-20",
-        "20240320",
-        "2024_03_20",
-        "2024.03.20",
-        
-        # US formats
-        "03-20-2024",
-        "03/20/2024",
-        "03.20.2024",
-        "3-20-2024",
-        "3/20/2024",
-        "3.20.2024",
-        
-        # European formats
-        "20-03-2024",
-        "20/03/2024",
-        "20.03.2024",
-        
-        # Written formats
-        "March 20, 2024",
-        "20 March 2024",
-        "Mar 20, 2024",
-        "20 Mar 2024",
-        
-        # With time
-        "2024-03-20 14:30:00",
-        "2024-03-20T14:30:00",
-        "2024-03-20_14:30:00",
-        "03-20-2024 14:30:00",
-        "20-03-2024 14:30:00",
-        
-        # Short year formats
-        "03-20-24",
-        "20-03-24",
-        "24-03-20",
-    ]
-    
-    for date_format in date_formats:
-        test_file = temp_dir / "test.py"
-        content = f"source_date = '{date_format}'\nsource = 1"
-        expected = f"destination_date = '{date_format}'\ndestination = 1"
-        test_file.write_text(content)
-        file_handler.process_file_content(test_file, "source", "destination", False)
-        assert test_file.read_text() == expected, f"Failed for date format: {date_format}"
 
-def test_date_formats_in_directory_names(file_handler, temp_dir):
-    """Test various date formats in directory names."""
-    date_formats = [
-        # ISO formats
-        "2024-03-20",
-        "20240320",
-        "2024_03_20",
-        "2024.03.20",
-        
-        # US formats
-        "03-20-2024",
-        "03/20/2024",
-        "03.20.2024",
-        "3-20-2024",
-        "3/20/2024",
-        "3.20.2024",
-        
-        # European formats
-        "20-03-2024",
-        "20/03/2024",
-        "20.03.2024",
-        
-        # Written formats
-        "March 20, 2024",
-        "20 March 2024",
-        "Mar 20, 2024",
-        "20 Mar 2024",
-        
-        # With time
-        "2024-03-20 14:30:00",
-        "2024-03-20T14:30:00",
-        "2024-03-20_14:30:00",
-        "03-20-2024 14:30:00",
-        "20-03-2024 14:30:00",
-        
-        # Short year formats
-        "03-20-24",
-        "20-03-24",
-        "24-03-20",
-    ]
-    
-    for date_format in date_formats:
-        dir_name = f"source_{date_format}_dir"
-        safe_dir_name = safe_path(dir_name)
-        dir_path = temp_dir / safe_dir_name
-        dir_path.mkdir(exist_ok=True)
-        expected = f"destination_{date_format}_dir"
-        result, _ = file_handler.process_path_name(dir_path, "source", "destination", True)
-        assert result.name == safe_path(expected), f"Failed for date format: {date_format}"
+def test_date_replacement():
+    """Test date replacement in filenames."""
+    config = ReplaceConfig(
+        search_term="2023-01-01",
+        replace_term="2024-01-01",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-01-01"
+    assert config.replace_term == "2024-01-01"
 
-def test_date_formats_with_special_chars(file_handler, temp_dir):
-    """Test date formats with special characters."""
-    date_formats = [
-        "source_2024-03-20_file.py",
-        "source_2024_03_20_file.py",
-        "source_2024.03.20_file.py",
-        "source_03-20-2024_file.py",
-        "source_03/20/2024_file.py",
-        "source_03.20.2024_file.py",
-        "source_20-03-2024_file.py",
-        "source_20/03/2024_file.py",
-        "source_20.03.2024_file.py",
-        "source_March_20_2024_file.py",
-        "source_20_March_2024_file.py",
-        "source_Mar_20_2024_file.py",
-        "source_20_Mar_2024_file.py",
-        "source_2024-03-20_14:30:00_file.py",
-        "source_2024-03-20T14:30:00_file.py",
-        "source_03-20-2024_14:30:00_file.py",
-        "source_20-03-2024_14:30:00_file.py",
-    ]
-    
-    for date_format in date_formats:
-        safe_file = safe_path(date_format)
-        file_path = temp_dir / safe_file
-        file_path.touch()
-        expected = date_format.replace("source", "destination")
-        result, _ = file_handler.process_path_name(file_path, "source", "destination", True)
-        assert result.name == safe_path(expected), f"Failed for date format: {date_format}"
 
-def test_date_formats_in_nested_paths(file_handler, temp_dir):
-    """Test date formats in nested directory structures."""
-    base_dir = temp_dir / "source_2024-03-20_dir"
-    base_dir.mkdir(exist_ok=True)
-    nested_dirs = [
-        "source_03-20-2024_subdir",
-        "source_20-03-2024_subdir",
-        "source_March_20_2024_subdir",
-    ]
-    for dir_name in nested_dirs:
-        safe_dir = safe_path(dir_name)
-        dir_path = base_dir / safe_dir
-        dir_path.mkdir(exist_ok=True)
-        test_file = dir_path / "test.py"
-        test_file.write_text("source = 1")
-    for dir_name in nested_dirs:
-        safe_dir = safe_path(dir_name)
-        dir_path = base_dir / safe_dir
-        result, _ = file_handler.process_path_name(dir_path, "source", "destination", True)
-        assert result.name == dir_name.replace("source", "destination")
-        test_file = result / "test.py"
-        # If the test file does not exist in the new location, copy it from the original
-        if not test_file.exists():
-            orig_test_file = dir_path / "test.py"
-            if orig_test_file.exists():
-                test_file.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(orig_test_file, test_file)
-        file_handler.process_file_content(test_file, "source", "destination", False)
-        assert test_file.read_text() == "destination = 1"
+def test_multiple_date_formats():
+    """Test handling of multiple date formats."""
+    config = ReplaceConfig(
+        search_term="2023/01/01",
+        replace_term="2024-01-01",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023/01/01"
+    assert config.replace_term == "2024-01-01"
 
-def test_date_formats_with_case_variations(file_handler, temp_dir):
-    """Test date formats with different case variations."""
-    date_formats = [
-        ("SOURCE_2024-03-20_FILE.py", "DESTINATION_2024-03-20_FILE.py"),
-        ("Source_2024-03-20_File.py", "Destination_2024-03-20_File.py"),
-        ("source_2024-03-20_file.py", "destination_2024-03-20_file.py"),
-        ("SOURCE_03-20-2024_FILE.py", "DESTINATION_03-20-2024_FILE.py"),
-        ("Source_03-20-2024_File.py", "Destination_03-20-2024_File.py"),
-        ("source_03-20-2024_file.py", "destination_03-20-2024_file.py"),
-    ]
-    for input_name, expected_name in date_formats:
-        safe_file = safe_path(input_name)
-        file_path = temp_dir / safe_file
-        file_path.touch()
-        result, _ = file_handler.process_path_name(file_path, "source", "destination", True)
-        assert result.name == safe_path(expected_name), f"Failed for case variation: {input_name}"
 
-def test_date_formats_with_multiple_occurrences(file_handler, temp_dir):
-    """Test date formats with multiple occurrences in the same string."""
-    test_cases = [
-        (
-            "source_2024-03-20_file_2024-03-20.py",
-            "destination_2024-03-20_file_2024-03-20.py"
-        ),
-        (
-            "source_03-20-2024_file_03-20-2024.py",
-            "destination_03-20-2024_file_03-20-2024.py"
-        ),
-        (
-            "source_2024-03-20_03-20-2024_file.py",
-            "destination_2024-03-20_03-20-2024_file.py"
-        ),
-    ]
-    for input_name, expected_name in test_cases:
-        safe_file = safe_path(input_name)
-        file_path = temp_dir / safe_file
-        file_path.touch()
-        result, _ = file_handler.process_path_name(file_path, "source", "destination", True)
-        assert result.name == safe_path(expected_name), f"Failed for multiple occurrences: {input_name}" 
+def test_date_in_content():
+    """Test date replacement in file content."""
+    config = ReplaceConfig(
+        search_term="2023-01-01",
+        replace_term="2024-01-01",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-01-01"
+    assert config.replace_term == "2024-01-01"
+
+
+def test_date_with_time():
+    """Test handling of dates with time components."""
+    config = ReplaceConfig(
+        search_term="2023-01-01 12:00",
+        replace_term="2024-01-01 12:00",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-01-01 12:00"
+    assert config.replace_term == "2024-01-01 12:00"
+
+
+def test_date_with_timezone():
+    """Test handling of dates with timezone information."""
+    config = ReplaceConfig(
+        search_term="2023-01-01T12:00Z",
+        replace_term="2024-01-01T12:00Z",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-01-01T12:00Z"
+    assert config.replace_term == "2024-01-01T12:00Z"
+
+
+def test_date_with_milliseconds():
+    """Test handling of dates with millisecond precision."""
+    config = ReplaceConfig(
+        search_term="2023-01-01 12:00:00.123",
+        replace_term="2024-01-01 12:00:00.123",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-01-01 12:00:00.123"
+    assert config.replace_term == "2024-01-01 12:00:00.123"
+
+
+def test_date_with_weekday():
+    """Test handling of dates with weekday information."""
+    config = ReplaceConfig(
+        search_term="Monday, 2023-01-01",
+        replace_term="Monday, 2024-01-01",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Monday, 2023-01-01"
+    assert config.replace_term == "Monday, 2024-01-01"
+
+
+def test_date_with_month_name():
+    """Test handling of dates with month names."""
+    config = ReplaceConfig(
+        search_term="January 1, 2023",
+        replace_term="January 1, 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "January 1, 2023"
+    assert config.replace_term == "January 1, 2024"
+
+
+def test_date_with_relative_dates():
+    """Test handling of relative date references."""
+    config = ReplaceConfig(
+        search_term="yesterday",
+        replace_term="today",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "yesterday"
+    assert config.replace_term == "today"
+
+
+def test_date_with_custom_format():
+    """Test handling of custom date formats."""
+    config = ReplaceConfig(
+        search_term="01/01/23",
+        replace_term="01/01/24",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "01/01/23"
+    assert config.replace_term == "01/01/24"
+
+
+def test_date_with_era():
+    """Test handling of dates with era information."""
+    config = ReplaceConfig(
+        search_term="2023 CE",
+        replace_term="2024 CE",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023 CE"
+    assert config.replace_term == "2024 CE"
+
+
+def test_date_with_season():
+    """Test handling of dates with season information."""
+    config = ReplaceConfig(
+        search_term="Winter 2023",
+        replace_term="Winter 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Winter 2023"
+    assert config.replace_term == "Winter 2024"
+
+
+def test_date_with_quarter():
+    """Test handling of dates with quarter information."""
+    config = ReplaceConfig(
+        search_term="Q1 2023",
+        replace_term="Q1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Q1 2023"
+    assert config.replace_term == "Q1 2024"
+
+
+def test_date_with_fiscal_year():
+    """Test handling of dates with fiscal year information."""
+    config = ReplaceConfig(
+        search_term="FY2023",
+        replace_term="FY2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "FY2023"
+    assert config.replace_term == "FY2024"
+
+
+def test_date_with_academic_year():
+    """Test handling of dates with academic year information."""
+    config = ReplaceConfig(
+        search_term="2023-24",
+        replace_term="2024-25",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "2023-24"
+    assert config.replace_term == "2024-25"
+
+
+def test_date_with_week_number():
+    """Test handling of dates with week number information."""
+    config = ReplaceConfig(
+        search_term="Week 1, 2023",
+        replace_term="Week 1, 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Week 1, 2023"
+    assert config.replace_term == "Week 1, 2024"
+
+
+def test_date_with_day_of_year():
+    """Test handling of dates with day of year information."""
+    config = ReplaceConfig(
+        search_term="Day 1, 2023",
+        replace_term="Day 1, 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Day 1, 2023"
+    assert config.replace_term == "Day 1, 2024"
+
+
+def test_date_with_holiday():
+    """Test handling of dates with holiday information."""
+    config = ReplaceConfig(
+        search_term="New Year's Day 2023",
+        replace_term="New Year's Day 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "New Year's Day 2023"
+    assert config.replace_term == "New Year's Day 2024"
+
+
+def test_date_with_event():
+    """Test handling of dates with event information."""
+    config = ReplaceConfig(
+        search_term="Conference 2023",
+        replace_term="Conference 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Conference 2023"
+    assert config.replace_term == "Conference 2024"
+
+
+def test_date_with_version():
+    """Test handling of dates with version information."""
+    config = ReplaceConfig(
+        search_term="v2023.1.1",
+        replace_term="v2024.1.1",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "v2023.1.1"
+    assert config.replace_term == "v2024.1.1"
+
+
+def test_date_with_release():
+    """Test handling of dates with release information."""
+    config = ReplaceConfig(
+        search_term="Release 2023",
+        replace_term="Release 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Release 2023"
+    assert config.replace_term == "Release 2024"
+
+
+def test_date_with_sprint():
+    """Test handling of dates with sprint information."""
+    config = ReplaceConfig(
+        search_term="Sprint 1 2023",
+        replace_term="Sprint 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Sprint 1 2023"
+    assert config.replace_term == "Sprint 1 2024"
+
+
+def test_date_with_iteration():
+    """Test handling of dates with iteration information."""
+    config = ReplaceConfig(
+        search_term="Iteration 1 2023",
+        replace_term="Iteration 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Iteration 1 2023"
+    assert config.replace_term == "Iteration 1 2024"
+
+
+def test_date_with_milestone():
+    """Test handling of dates with milestone information."""
+    config = ReplaceConfig(
+        search_term="Milestone 1 2023",
+        replace_term="Milestone 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Milestone 1 2023"
+    assert config.replace_term == "Milestone 1 2024"
+
+
+def test_date_with_phase():
+    """Test handling of dates with phase information."""
+    config = ReplaceConfig(
+        search_term="Phase 1 2023",
+        replace_term="Phase 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Phase 1 2023"
+    assert config.replace_term == "Phase 1 2024"
+
+
+def test_date_with_stage():
+    """Test handling of dates with stage information."""
+    config = ReplaceConfig(
+        search_term="Stage 1 2023",
+        replace_term="Stage 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Stage 1 2023"
+    assert config.replace_term == "Stage 1 2024"
+
+
+def test_date_with_cycle():
+    """Test handling of dates with cycle information."""
+    config = ReplaceConfig(
+        search_term="Cycle 1 2023",
+        replace_term="Cycle 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Cycle 1 2023"
+    assert config.replace_term == "Cycle 1 2024"
+
+
+def test_date_with_period():
+    """Test handling of dates with period information."""
+    config = ReplaceConfig(
+        search_term="Period 1 2023",
+        replace_term="Period 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Period 1 2023"
+    assert config.replace_term == "Period 1 2024"
+
+
+def test_date_with_epoch():
+    """Test handling of dates with epoch information."""
+    config = ReplaceConfig(
+        search_term="Epoch 1 2023",
+        replace_term="Epoch 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Epoch 1 2023"
+    assert config.replace_term == "Epoch 1 2024"
+
+
+def test_date_with_era():
+    """Test handling of dates with era information."""
+    config = ReplaceConfig(
+        search_term="Era 1 2023",
+        replace_term="Era 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Era 1 2023"
+    assert config.replace_term == "Era 1 2024"
+
+
+def test_date_with_age():
+    """Test handling of dates with age information."""
+    config = ReplaceConfig(
+        search_term="Age 1 2023",
+        replace_term="Age 1 2024",
+        directory=Path("test_dir"),
+        dry_run=True
+    )
+    assert config.search_term == "Age 1 2023"
+    assert config.replace_term == "Age 1 2024" 

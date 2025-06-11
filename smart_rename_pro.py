@@ -1,8 +1,7 @@
 import argparse
 import logging
-import platform
 import re
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, Tuple, List, Dict
@@ -22,12 +21,6 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-
-# Prevent duplicate logging
-logger.propagate = False
-handler = logging.StreamHandler()
-handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - [%(funcName)s] - %(message)s'))
-logger.addHandler(handler)
 
 @dataclass
 class ReplaceConfig:

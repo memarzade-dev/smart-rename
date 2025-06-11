@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ 
+  theme: localStorage.theme || 'auto', 
+  showMobileMenu: false,
+  copiedTON: false,
+  copiedTRON: false
+}" :class="{ 'dark': theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) }" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart-Rename: Documentation | memarzade.dev</title>
+  <meta name="description" content="Official documentation for Smart-Rename: Enterprise Edition, a Python script for intelligent file and content renaming in enterprise workflows.">
+  <meta name="keywords" content="Smart-Rename, file renaming, Python script, enterprise software, batch renaming, gitignore, documentation, memarzade.dev">
+  <meta name="author" content="Ali Memarzade">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://memarzade.dev/smart-rename/readme">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Smart-Rename: Documentation">
+  <meta property="og:description" content="Comprehensive documentation for Smart-Rename: Enterprise Edition, a powerful file renaming tool.">
+  <meta property="og:url" content="https://memarzade.dev/smart-rename/readme">
+  <meta property="og:image" content="https://memarzade.dev/smart-rename/og-image.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Smart-Rename: Documentation">
+  <meta name="twitter:description" content="Official documentation for Smart-Rename: Enterprise Edition.">
+  <meta name="twitter:image" content="https://memarzade.dev/smart-rename/og-image.png">
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Smart-Rename: Enterprise Edition Documentation",
+      "description": "Comprehensive documentation for Smart-Rename, a Python script for intelligent file and content renaming.",
+      "author": {
+        "@type": "Person",
+        "name": "Ali Memarzade",
+        "url": "https://memarzade.dev"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "memarzade.dev",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://memarzade.dev/logo.png"
+        }
+      },
+      "datePublished": "2024-03-19",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://memarzade.dev/smart-rename/readme"
+      }
+    }
+  </script>
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M4 2h16a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm2 4v12h12V6H6zm2 2h8v2H8V8zm0 4h8v2H8v-2z'/></svg>">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            dark: '#0a0a0a',
+            light: '#fafafa',
+            primary: '#000000',
+            'primary-dark': '#ffffff',
+            gray: {
+              50: '#f9fafb',
+              100: '#f3f4f6',
+              200: '#e5e7eb',
+              300: '#d1d5db',
+              400: '#9ca3af',
+              500: '#6b7280',
+              600: '#4b5563',
+              700: '#374151',
+              800: '#1f2a44',
+              900: '#111827'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+            mono: ['Fira Code', 'ui-monospace', 'monospace']
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out',
+            'slide-in': 'slideIn 0.3s ease-out'
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            slideIn: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Alpine.js CDN -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+  <!-- Prism.js CDN for Syntax Highlighting -->
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .copy-success { animation: flash 0.5s; }
+    @keyframes flash {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: rgba(0, 0, 0, 0.1); }
+    }
+    .sidebar-link.active {
+      border-left: 4px solid #000;
+      background-color: rgba(0, 0, 0, 0.05);
+      font-weight: 600;
+    }
+    .dark .sidebar-link.active {
+      border-left: 4px solid #fff;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .prose {
+      max-width: 80ch;
+      line-height: 1.75;
+    }
+    .prose pre {
+      @apply bg-gray-100 dark:bg-gray-800 rounded-lg p-4 overflow-x-auto;
+    }
+    .prose code {
+      @apply font-mono text-sm;
+    }
+    .prose a {
+      @apply underline hover:text-gray-600 dark:hover:text-gray-300;
+    }
+  </style>
+</head>
+<body class="bg-light dark:bg-dark text-primary dark:text-primary-dark min-h-screen font-sans">
+  <!-- Mobile Menu -->
+  <div class="md:hidden fixed top-0 left-0 right-0 bg-light dark:bg-dark z-50 shadow-md">
+    <div class="flex justify-between items-center p-4">
+      <a href="#" class="text-2xl font-bold">Smart-Rename Docs</a>
+      <button @click="showMobileMenu = !showMobileMenu" aria-label="Toggle mobile menu" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" x-show="!showMobileMenu" x-cloak></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" x-show="showMobileMenu" x-cloak></path>
+        </svg>
+      </button>
+    </div>
+    <div x-show="showMobileMenu" x-cloak x-transition class="p-4 bg-light dark:bg-dark border-t border-gray-200 dark:border-gray-600">
+      <nav>
+        <ul class="space-y-1">
+          <li><a href="#overview" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Overview</a></li>
+          <li><a href="#features" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Features</a></li>
+          <li><a href="#installation" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Installation</a></li>
+          <li><a href="#usage" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Usage</a></li>
+          <li><a href="#configuration" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Configuration</a></li>
+          <li><a href="#examples" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-6">Examples</a></li>
+          <li><a href="#contributing" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-6">Contributing</a></li>
+          <li><a href="#support" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-6">Support</a></li>
+          <li><a href="#license" @click="showMobileMenu = false" class="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-6">License</a></li>
+        </ul>
+      </nav>
+      <div class="mt-4 pt-2 border-t border-gray-200 dark:border-gray-600">
+        <label class="block text-sm font-medium">Theme</label>
+        <div class="flex gap-2 mt-2">
+          <button @click="theme = 'light'; localStorage.theme = 'light'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'light' }" class="p-2 rounded" aria-label="Light theme">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </button>
+          <button @click="theme = 'dark'; localStorage.theme = 'dark'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'dark' }" class="p-2 rounded" aria-label="Dark theme">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+          </button>
+          <button @click="theme = 'auto'; localStorage.theme = 'auto'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'auto' }" class="p-2 rounded" aria-label="System theme">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Layout -->
+  <div class="flex">
+    <!-- Sidebar -->
+    <aside class="hidden md:block w-64 h-screen sticky top-0 bg-light dark:bg-dark border-r border-gray-200 dark:border-gray-700">
+      <div class="p-6">
+        <h1 class="text-2xl font-bold">Smart-Rename Docs</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Enterprise Edition v2.1.0</p>
+        <nav class="mt-8">
+          <ul class="space-y-1">
+            <li><a href="#overview" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Overview</a></li>
+            <li><a href="#features" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Features</a></li>
+            <li><a href="#installation" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Installation</a></li>
+            <li><a href="#usage" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Usage</a></li>
+            <li><a href="#configuration" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Configuration</a></li>
+            <li><a href="#examples" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Examples</a></li>
+            <li><a href="#contributing" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Contributing</a></li>
+            <li><a href="#support" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">Support</a></li>
+            <li><a href="#license" class="sidebar-link block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">License</a></li>
+          </ul>
+        </nav>
+        <!-- Support Section -->
+        <div class="mt-8 p-4 bg-gray-100 dark:bg-gray-900 rounded-lg">
+          <h3 class="text-sm font-semibold">Support the Project</h3>
+          <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Your contributions keep Smart-Rename thriving.</p>
+          <div class="mt-2 space-y-2">
+            <!-- TON Wallet -->
+            <div x-data="{ copied: false }" class="flex items-center justify-between p-2 bg-light dark:bg-dark rounded border border-gray-200 dark:border-gray-700">
+              <span class="text-xs font-mono truncate">UQAc2D8n8xER...</span>
+              <button @click="navigator.clipboard.writeText('UQAc2D8n8xERl7oaC509o8mTe4d07JDDU73qvz-eXSlprwjO'); copied = true; setTimeout(() => copied = false, 2000)" :class="{ 'copy-success': copied }" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Copy TON wallet address">
+                <span x-text="copied ? '✓' : '📋'" class="text-xs"></span>
+              </button>
+            </div>
+            <!-- TRON Wallet -->
+            <div x-data="{ copied: false }" class="flex items-center justify-between p-2 bg-light dark:bg-dark rounded border border-gray-200 dark:border-gray-700">
+              <span class="text-xs font-mono truncate">TXjYKKCudbhu...</span>
+              <button @click="navigator.clipboard.writeText('TXjYKKCudbhuVEpQXBRk2J4CxFoyuzyjsg'); copied = true; setTimeout(() => copied = false, 2000)" :class="{ 'copy-success': copied }" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Copy TRON wallet address">
+                <span x-text="copied ? '✓' : '📋'" class="text-xs"></span>
+              </button>
+            </div>
+          </div>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <a href="https://github.com/sponsors/memarzade-dev" target="_blank" rel="noopener" class="text-xs underline hover:text-gray-600 dark:hover:text-gray-300">GitHub Sponsors</a>
+            <a href="https://ko-fi.com/memarzade-dev" target="_blank" rel="noopener" class="text-xs underline hover:text-gray-600 dark:hover:text-gray-300">Ko-fi</a>
+            <a href="https://www.buymeacoffee.com/memarzade-dev" target="_blank" rel="noopener" class="text-xs underline hover:text-gray-600 dark:hover:text-gray-300">Buy Me a Coffee</a>
+          </div>
+        </div>
+        <!-- Theme Toggle -->
+        <div class="mt-6">
+          <h3 class="text-sm font-semibold">Theme</h3>
+          <div class="flex gap-2 mt-2">
+            <button @click="theme = 'light'; localStorage.theme = 'light'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'light' }" class="p-2 rounded" aria-label="Light theme">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+            </button>
+            <button @click="theme = 'dark'; localStorage.theme = 'dark'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'dark' }" class="p-2 rounded" aria-label="Dark theme">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+              </svg>
+            </button>
+            <button @click="theme = 'auto'; localStorage.theme = 'auto'" :class="{'bg-gray-200 dark:bg-gray-900': theme === 'auto' }" class="p-2 rounded" aria-label="System theme">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 md:p-10 pt-20 md:pt-10 max-w-4xl mx-auto prose dark:prose-invert">
+      <h1 class="text-4xl font-bold">Smart-Rename: Enterprise Edition</h1>
+      <p class="text-lg">Comprehensive documentation for a Python script designed for intelligent file and content renaming in enterprise workflows.</p>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <span class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-100 dark:bg-gray-800">v2.1.0</span>
+        <span class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-100 dark:bg-gray-800">MIT License</span>
+        <span class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-100 dark:bg-gray-800">Python 3.8–3.13</span>
+      </div>
+
+      <!-- Overview -->
+      <section id="overview" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">Overview</h2>
+        <p>Smart-Rename: Enterprise Edition is an open-source Python script for advanced file and content renaming, optimized for enterprise environments. It supports batch operations, respects `.gitignore` patterns, handles non-ASCII text, and offers YAML-based configuration for complex workflows.</p>
+        <p>Key highlights:</p>
+        <ul>
+          <li>Parallel processing for large-scale renaming.</li>
+          <li>Automatic encoding detection with `chardet`.</li>
+          <li>Case-preserving text replacements.</li>
+          <li>Support for over 50 text file extensions (e.g., `.py`, `.txt`, `.md`).</li>
+          <li>Dry-run mode to preview changes safely.</li>
+          <li>Enterprise-grade support via Tidelift.</li>
+        </ul>
+      </section>
+
+      <!-- Features -->
+      <section id="features" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <h3 class="font-semibold">Batch Renaming</h3>
+            <p class="text-sm">Rename files and directories in bulk with precise control.</p>
+          </div>
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <h3 class="font-semibold">Content Replacement</h3>
+            <p class="text-sm">Update text within files, preserving encoding and formatting.</p>
+          </div>
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <h3 class="font-semibold">Gitignore Support</h3>
+            <p class="text-sm">Respect `.gitignore` patterns to avoid unwanted changes.</p>
+          </div>
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <h3 class="font-semibold">Non-ASCII Handling</h3>
+            <p class="text-sm">Seamlessly process Unicode text, including Persian.</p>
+          </div>
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <h3 class="font-semibold">Parallel Processing</h3>
+            <p class="text-sm">Utilize multiple workers (1–16) for faster operations.</p>
+          </div>
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <h3 class="font-semibold">Dry-Run Mode</h3>
+            <p class="text-sm">Preview changes without modifying files.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Installation -->
+      <section id="installation" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">Installation</h2>
+        <h3 class="text-xl font-semibold mt-6">Requirements</h3>
+        <ul>
+          <li>Python 3.8–3.13</li>
+          <li>pip package manager</li>
+        </ul>
+        <h3 class="text-xl font-semibold mt-6">From Source</h3>
+        <pre class="language-bash"><code>git clone https://github.com/memarzade-dev/smart-rename.git
+cd smart-rename
+pip install -r requirements.txt
+</code></pre>
+        <h3 class="text-xl font-semibold mt-6">Standalone Usage</h3>
+        <p>Run the script directly after downloading:</p>
+        <pre class="language-bash"><code>python smart_rename_pro.py --help
+</code></pre>
+        <p>Dependencies (listed in `requirements.txt`):</p>
+        <ul>
+          <li><code>chardet>=5.2.0,<6.0</code></li>
+          <li><code>pyyaml>=6.0.2,<7.0</code></li>
+          <li><code>pathspec>=0.12.1,<0.13</code></li>
+        </ul>
+      </section>
+
+      <!-- Usage -->
+      <section id="usage" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">Usage</h2>
+        <p>Run the script with:</p>
+        <pre class="language-bash"><code>python smart_rename_pro.py --directory &lt;path&gt; --search &lt;term&gt; --replace &lt;term&gt; [options]
+</code></pre>
+        <h3 class="text-xl font-semibold mt-6">Options</h3>
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-900">
+            <tr>
+              <th class="px-4 py-2 text-left text-sm font-medium">Option</th>
+              <th class="px-4 py-2 text-left text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            <tr>
+              <td class="px-4 py-2 text-sm font-mono">--directory</td>
+              <td class="px-4 py-2 text-sm">Target directory (required)</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-sm font-mono">--search</td>
+              <td class="px-4 py-2 text-sm">Text to search for</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-sm font-mono">--replace</td>
+              <td class="px-4 py-2 text-sm">Replacement text</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-sm font-mono">--workers</td>
+              <td class="px-4 py-2 text-sm">Number of parallel workers (1–16, default: 4)</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-sm font-mono">--config</td>
+              <td class="px-4 py-2 text-sm">Path to YAML config file</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-sm font-mono">--dry-run</td>
+              <td class="px-4 py-2 text-sm">Preview changes without applying</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Configuration -->
+      <section id="configuration" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">Configuration</h2>
+        <p>Use a YAML file to specify settings:</p>
+        <pre class="language-yaml"><code>search_term: "old"
+replace_term: "new"
+exclude_extensions: [".log", ".bin"]
+include_extensions: [".py", ".txt"]
+</code></pre>
+        <p>Example usage with config:</p>
+        <pre class="language-bash"><code>python smart_rename_pro.py --directory ./project --config config.yaml
+</code></pre>
+      </section>
+
+      <!-- Examples -->
+      <section id="examples" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">Examples</h2>
+        <h3 class="text-xl font-semibold mt-6">Rename Files</h3>
+        <pre class="language-bash"><code>python smart_rename_pro.py --directory ./docs --search draft --replace final
+</code></pre>
+        <h3 class="text-xl font-semibold mt-6">Replace Content</h3>
+        <pre class="language-bash"><code>python smart_rename_pro.py --directory ./src --search "Copyright 2023" --replace "Copyright 2024"
+</code></pre>
+        <h3 class="text-xl font-semibold mt-6">Non-ASCII Renaming</h3>
+        <pre class="language-bash"><code>python smart_rename_pro.py --directory ./data --search "زرین پال" --replace "هدف"
+</code></pre>
+        <h3 class="text-xl font-semibold mt-6">Dry Run</h3>
+        <pre class="language-bash"><code>python smart_rename_pro.py --directory ./project --search old --replace new --dry-run
+</code></pre>
+        <h3 class="text-xl font-semibold mt-6">Using YAML Config</h3>
+        <pre class="language-bash"><code>python smart_rename_pro.py --directory ./app --config rename.yaml
+</code></pre>
+      </section>
+
+      <!-- Contributing -->
+      <section id="contributing" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">Contributing</h2>
+        <p>We welcome contributions! Follow these steps:</p>
+        <ol>
+          <li>Fork the repository on <a href="https://github.com/memarzade-dev/smart-rename" target="_blank" rel="noopener">GitHub</a>.</li>
+          <li>Create a feature or bugfix branch.</li>
+          <li>Write tests for your changes.</li>
+          <li>Submit a pull request with a clear description.</li>
+        </ol>
+        <h3 class="text-xl font-semibold mt-6">Development Setup</h3>
+        <pre class="language-bash"><code>git clone https://github.com/memarzade-dev/smart-rename.git
+cd smart-rename
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+pip install pytest pytest-cov flake8
+</code></pre>
+        <h3 class="text-xl font-semibold mt-6">Running Tests</h3>
+        <pre class="language-bash"><code>pytest tests/ --cov=smart_rename_pro
+</code></pre>
+      </section>
+
+      <!-- Support -->
+      <section id="support" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">Support</h2>
+        <p>Support Smart-Rename through donations, sponsorships, or enterprise subscriptions.</p>
+        <h3 class="text-xl font-semibold mt-6">Donate</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+            <h4 class="font-semibold">TON Wallet</h4>
+            <p class="text-sm font-mono break-all">UQAc2D8n8xERl7oaC509o8mTe4d07JDDU73qvz-eXSlprwjO</p>
+            <button @click="navigator.clipboard.writeText('UQAc2D8n8xERl7oaC509o8mTe4d07JDDU73qvz-eXSlprwjO'); copiedTON = true; setTimeout(() => copiedTON = false, 2000)" :class="{ 'copy-success': copiedTON }" class="mt-2 px-4 py-2 bg-primary dark:bg-primary-dark text-light dark:text-dark rounded hover:bg-gray-800 dark:hover:bg-gray-200" aria-label="Copy TON wallet address">
+              <span x-text="copiedTON ? 'Copied!' : 'Copy Address'"></span>
+            </button>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=UQAc2D8n8xERl7oaC509o8mTe4d07JDDU73qvz-eXSlprwjO" alt="TON Wallet QR Code" class="mt-4 mx-auto" loading="lazy">
+          </div>
+          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+            <h4 class="font-semibold">TRON Wallet</h4>
+            <p class="text-sm font-mono break-all">TXjYKKCudbhuVEpQXBRk2J4CxFoyuzyjsg</p>
+            <button @click="navigator.clipboard.writeText('TXjYKKCudbhuVEpQXBRk2J4CxFoyuzyjsg'); copiedTRON = true; setTimeout(() => copiedTRON = false, 2000)" :class="{ 'copy-success': copiedTRON }" class="mt-2 px-4 py-2 bg-primary dark:bg-primary-dark text-light dark:text-dark rounded hover:bg-gray-800 dark:hover:bg-gray-200" aria-label="Copy TRON wallet address">
+              <span x-text="copiedTRON ? 'Copied!' : 'Copy Address'"></span>
+            </button>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TXjYKKCudbhuVEpQXBRk2J4CxFoyuzyjsg" alt="TRON Wallet QR Code" class="mt-4 mx-auto" loading="lazy">
+          </div>
+        </div>
+        <h3 class="text-xl font-semibold mt-6">Sponsor</h3>
+        <div class="flex flex-wrap gap-4">
+          <a href="https://github.com/sponsors/memarzade-dev" target="_blank" rel="noopener" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">GitHub Sponsors</a>
+          <a href="https://ko-fi.com/memarzade-dev" target="_blank" rel="noopener" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">Ko-fi</a>
+          <a href="https://www.buymeacoffee.com/memarzade-dev" target="_blank" rel="noopener" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">Buy Me a Coffee</a>
+          <a href="https://opencollective.com/memarzade-dev" target="_blank" rel="noopener" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">Open Collective</a>
+        </div>
+        <h3 class="text-xl font-semibold mt-6">Enterprise Support</h3>
+        <p>Access premium support, custom integrations, and SLAs via <a href="https://tidelift.com/subscription/pkg/pypi-smart-rename" target="_blank" rel="noopener">Tidelift</a>.</p>
+      </section>
+
+      <!-- License -->
+      <section id="license" class="pt-12 animate-slide-in">
+        <h2 class="text-3xl font-bold">License</h2>
+        <p>Smart-Rename is licensed under the MIT License:</p>
+        <pre class="language-text"><code>MIT License
+
+Copyright (c) 2024 Ali Memarzade
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</code></pre>
+      </section>
+
+      <footer class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div>
+            <p class="text-sm">© 2024 Ali Memarzade. All rights reserved.</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400">Smart-Rename v2.1.0</p>
+          </div>
+          <div class="flex gap-4 text-sm">
+            <a href="https://github.com/memarzade-dev/smart-rename" target="_blank" rel="noopener" class="underline hover:text-gray-600 dark:hover:text-gray-300">GitHub</a>
+            <a href="https://memarzade.dev" target="_blank" rel="noopener" class="underline hover:text-gray-600 dark:hover:text-gray-300">memarzade.dev</a>
+            <a href="https://tidelift.com/subscription/pkg/pypi-smart-rename" target="_blank" rel="noopener" class="underline hover:text-gray-600 dark:hover:text-gray-300">Tidelift</a>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar Link Highlighting and Theme Sync
+    document.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('.sidebar-link');
+      let ticking = false;
+
+      function highlightCurrentSection() {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            links.forEach(link => link.classList.remove('active'));
+            const sections = document.querySelectorAll('section[id]');
+            let currentSection = null;
+
+            for (const section of sections) {
+              const rect = section.getBoundingClientRect();
+              if (rect.top <= 50 && rect.bottom >= 50) {
+                currentSection = section.id;
+                break;
+              }
+            }
+
+            if (currentSection) {
+              document.querySelectorAll(`.sidebar-link[href="#${currentSection}"]`).forEach(link => link.classList.add('active'));
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', highlightCurrentSection);
+      highlightCurrentSection();
+
+      // Dynamic Theme Sync for Auto Mode
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addEventListener('change', () => {
+        if (localStorage.theme === 'auto') {
+          document.documentElement.classList.toggle('dark', mediaQuery.matches);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
