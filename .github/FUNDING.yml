@@ -2,21 +2,21 @@
 # Where Innovation Meets Enterprise Excellence
 # Version: 2.1.0
 # Last Updated: 2024-03-19
-# Author: Ali Memarzade (memarzade-dev)
+# Author: Ali OxyChain (oxychain-dev)
 # License: MIT
 # Status: Active & Thriving
 
 # 🎯 Primary Funding Platforms & Community Support
 # This section contains platforms that will be displayed on your GitHub sponsor button.
 github:
-  - memarzade-dev
-  - memarzade-dev/smart-rename
-  - memarzade-dev/custom-sms
-custom: https://www.memarzade.dev
-ko_fi: memarzade-dev
-buy_me_a_coffee: memarzade-dev
-open_collective: memarzade-dev
-liberapay: memarzade-dev
+  - oxychain-dev
+  - oxychain-dev/smart-rename
+  - oxychain-dev/custom-sms
+custom: https://www.oxychain.dev
+ko_fi: oxychain-dev
+buy_me_a_coffee: oxychain-dev
+open_collective: oxychain-dev
+liberapay: oxychain-dev
 tidelift: npm/smart-rename
 
 # --- The sections below are for informational purposes and are not read by GitHub's sponsor feature ---
@@ -40,10 +40,10 @@ tidelift_details:
 
 # 💫 Professional Development Support
 github_details:
-  - user: memarzade-dev
+  - user: oxychain-dev
   - repos:
-      - memarzade-dev/smart-rename
-      - memarzade-dev/custom-sms
+      - oxychain-dev/smart-rename
+      - oxychain-dev/custom-sms
   - tier: enterprise
   - features:
       - private_repository_access
@@ -54,7 +54,7 @@ github_details:
 
 # 🌈 Corporate Sponsorship
 open_collective_details:
-  username: memarzade-dev
+  username: oxychain-dev
   type: corporate
   features:
     - priority_support
@@ -101,7 +101,7 @@ lfx_crowdfunding:
 
 # 📚 Professional Services
 professional_services:
-  - url: https://www.memarzade.dev
+  - url: https://www.oxychain.dev
     type: professional_services
     features:
       - consulting
@@ -113,7 +113,7 @@ professional_services:
       - aws_certified
       - azure_certified
       - kubernetes_certified
-  - url: https://memarzade.dev/smart-rename
+  - url: https://oxychain.dev/smart-rename
     type: documentation
     features:
       - api_reference
@@ -129,7 +129,7 @@ professional_services:
 
 # 🌟 Enterprise Integration Support
 polar:
-  username: memarzade-dev
+  username: oxychain-dev
   services:
     - enterprise_integration
     - custom_development
@@ -144,7 +144,7 @@ polar:
 
 # 🛡️ Security & Compliance
 issuehunt:
-  username: memarzade-dev
+  username: oxychain-dev
   focus:
     - security_audits
     - compliance_reviews
@@ -159,7 +159,7 @@ issuehunt:
 
 # 📚 Documentation & Training
 thanks_dev:
-  username: memarzade-dev
+  username: oxychain-dev
   services:
     - technical_documentation
     - training_materials

@@ -243,13 +243,13 @@ class SponsorshipDialog(QDialog):
 
         # Sponsorship options
         self.create_sponsor_button(
-            layout, "💼 Sponsor on GitHub", "https://github.com/sponsors/memarzade-dev"
+            layout, "💼 Sponsor on GitHub", "https://github.com/sponsors/oxychain-dev"
         )
         self.create_sponsor_button(
-            layout, "☕ Buy Me a Coffee", "https://www.buymeacoffee.com/memarzade-dev"
+            layout, "☕ Buy Me a Coffee", "https://www.buymeacoffee.com/oxychain-dev"
         )
         self.create_sponsor_button(
-            layout, "💝 Support on Ko-fi", "https://ko-fi.com/memarzade-dev"
+            layout, "💝 Support on Ko-fi", "https://ko-fi.com/oxychain-dev"
         )
 
     def create_sponsor_button(self, layout, text, url):

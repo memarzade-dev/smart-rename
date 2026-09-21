@@ -157,7 +157,7 @@ python -m smart_rename_pro --version
 From Source
 
 Clone the repository:
-git clone https://github.com/memarzade-dev/smart-rename.git
+git clone https://github.com/oxychain-dev/smart-rename.git
 cd smart-rename
 
 
@@ -191,7 +191,7 @@ sudo apt-get install python3.10 python3-pip
 macOS:brew install python@3.10
 
 
-Homebrew (Experimental):brew tap memarzade-dev/smart-rename
+Homebrew (Experimental):brew tap oxychain-dev/smart-rename
 brew install smart-rename
 
 
@@ -535,7 +535,7 @@ Push:git push origin feature/my-feature
 Open a Pull Request.
 
 Development Setup
-git clone https://github.com/memarzade-dev/smart-rename.git
+git clone https://github.com/oxychain-dev/smart-rename.git
 cd smart-rename
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
@@ -577,7 +577,7 @@ Closes #123
 
 Issue Templates: Use .github/ISSUE_TEMPLATE for bugs and features.
 Support & Sponsorship
-Smart-Rename is maintained by Ali Memarzade with community support. Your contributions ensure continued development, security, and enterprise features.
+Smart-Rename is maintained by Ali OxyChain with community support. Your contributions ensure continued development, security, and enterprise features.
 Donate
 Support via cryptocurrency:
 
@@ -616,7 +616,7 @@ License
 MIT License
 MIT License
 
-Copyright (c) 2024 Ali Memarzade
+Copyright (c) 2024 Ali OxyChain
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -640,9 +640,9 @@ Contact
 
 Issues: GitHub Issues
 Discussions: GitHub Discussions
-Email: memarzade.dev
+Email: oxychain.dev
 Sponsor: Support Us
 
 
 
-  Built with ❤️ by Ali Memarzade | Powered by the Community
+  Built with ❤️ by Ali OxyChain | Powered by the Community
